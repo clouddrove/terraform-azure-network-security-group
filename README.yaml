@@ -1,0 +1,69 @@
+---
+#
+# This is the canonical configuration for the `README.md`
+# Run `make readme` to rebuild the `README.md`
+#
+
+
+# Name of this project
+name: Terraform AZURE NETWORK SECURITY GROUP
+
+# License of this project
+license: "APACHE"
+
+# Canonical GitHub repo
+github_repo: clouddrove/terraform-azure-network-security-group
+
+# Badges to display
+badges:
+  - name: "Terraform"
+    image: "https://img.shields.io/badge/Terraform-v1.0.0-green"
+    url: "https://www.terraform.io"
+  - name: "Licence"
+    image: "https://img.shields.io/badge/License-APACHE-blue.svg"
+    url: "LICENSE"
+
+#  description of this project
+description: |-
+  Terraform module to create NETWORK SECURITY GROUP resource on AZURE.
+
+# extra content
+include:
+  - "terraform.md"
+
+# How to use this project
+# yamllint disable rule:line-length
+usage: |-
+  ### Simple Example
+  Here is an example of how you can use this module in your inventory structure:
+    ```hcl
+    module "security_group" {
+      source              = "clouddrove/network-security-group/azure"
+      version             = "1.0.0"
+      name                = "example"
+      environment         = "test"
+      label_order         = ["name","environment"]
+      resource_group_name = module.resource_group.resource_group_name
+      location            = module.resource_group.resource_group_location
+      custom_port         = [{
+      name                         = "ssh"
+      protocol                     = "Tcp"
+      source_port_range            = "*"
+      destination_port_ranges      = ["22"]
+      source_address_prefixes      = ["67.23.123.234/32"]
+      destination_address_prefixes = ["0.0.0.0/0"]
+      access                       = "Allow"
+      priority                     = 1002
+      },
+      {
+      name                         = "http-https"
+      protocol                     = "Tcp"
+      source_port_range            = "*"
+      destination_port_ranges      = ["80","443"]
+      source_address_prefixes      = ["0.0.0.0/0"]
+      destination_address_prefixes = ["0.0.0.0/0"]
+      access                       = "Allow"
+      priority                     = 1003
+      }]
+    }
+    ```
