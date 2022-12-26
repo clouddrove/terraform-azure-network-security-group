@@ -1,11 +1,11 @@
 output "security_group_id" {
   value       = join("", azurerm_network_security_group.default.*.id)
-  description = "The Name of the Network Security Group."
+  description = "Specifies the name of the network security group. Changing this forces a new resource to be created."
 }
 
 output "security_group_name" {
   value       = join("", azurerm_network_security_group.default.*.name)
-  description = "The Name of the Network Security Group."
+  description = "The name of the resource group in which to create the network security group. Changing this forces a new resource to be created."
 }
 
 output "outbound_rule_name" {
