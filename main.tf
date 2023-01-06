@@ -70,6 +70,7 @@ resource "azurerm_network_security_rule" "outbound" {
   destination_address_prefix  = lookup(each.value, "destination_address_prefix", "*")
   destination_port_range      = lookup(each.value, "destination_port_range", "*")
   description                 = lookup(each.value, "description", null)
+
   timeouts {
     create = var.create
     update = var.update
