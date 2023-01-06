@@ -21,7 +21,7 @@ resource "azurerm_network_security_group" "nsg" {
   resource_group_name = var.resource_group_name
   location            = var.resource_group_location
   tags                = module.labels.tags
-  
+
   timeouts {
     create = var.create
     update = var.update
