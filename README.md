@@ -4,11 +4,13 @@
 
 
 <h1 align="center">
-    Terraform AZURE VIRTUAL-NETWORK
+    Terraform AZURE NETWORK SECURITY GROUP
+
+
 </h1>
 
 <p align="center" style="font-size: 1.2rem;"> 
-    Terraform module to create VIRTUAL-NETWORK resource on AZURE.
+    Terraform module to create NETWORK SECURITY GROUP resource on AZURE.
      </p>
 
 <p align="center">
@@ -16,7 +18,7 @@
 <a href="https://www.terraform.io">
   <img src="https://img.shields.io/badge/Terraform-v1.0.0-green" alt="Terraform">
 </a>
-<a href="LICENSE.md">
+<a href="LICENSE">
   <img src="https://img.shields.io/badge/License-APACHE-blue.svg" alt="Licence">
 </a>
 
@@ -24,13 +26,13 @@
 </p>
 <p align="center">
 
-<a href='https://facebook.com/sharer/sharer.php?u=https://github.com/clouddrove/terraform-azure-vnet'>
+<a href='https://facebook.com/sharer/sharer.php?u=https://github.com/clouddrove/terraform-azure-network-security-group'>
   <img title="Share on Facebook" src="https://user-images.githubusercontent.com/50652676/62817743-4f64cb80-bb59-11e9-90c7-b057252ded50.png" />
 </a>
-<a href='https://www.linkedin.com/shareArticle?mini=true&title=Terraform+AZURE+VIRTUAL-NETWORK&url=https://github.com/clouddrove/terraform-azure-vnet'>
+<a href='https://www.linkedin.com/shareArticle?mini=true&title=Terraform+AZURE+NETWORK+SECURITY+GROUP&url=https://github.com/clouddrove/terraform-azure-network-security-group'>
   <img title="Share on LinkedIn" src="https://user-images.githubusercontent.com/50652676/62817742-4e339e80-bb59-11e9-87b9-a1f68cae1049.png" />
 </a>
-<a href='https://twitter.com/intent/tweet/?text=Terraform+AZURE+VIRTUAL-NETWORK&url=https://github.com/clouddrove/terraform-azure-vnet'>
+<a href='https://twitter.com/intent/tweet/?text=Terraform+AZURE+NETWORK+SECURITY+GROUP&url=https://github.com/clouddrove/terraform-azure-network-security-group'>
   <img title="Share on Twitter" src="https://user-images.githubusercontent.com/50652676/62817740-4c69db00-bb59-11e9-8a79-3580fbbf6d5c.png" />
 </a>
 
@@ -65,22 +67,41 @@ This module has a few dependencies:
 ## Examples
 
 
-**IMPORTANT:** Since the `master` branch used in `source` varies based on new modifications, we suggest that you use the release versions [here](https://github.com/clouddrove/terraform-azure-vnet/releases).
+**IMPORTANT:** Since the `master` branch used in `source` varies based on new modifications, we suggest that you use the release versions [here](https://github.com/clouddrove/terraform-azure-network-security-group/releases).
 
 
 ### Simple Example
 Here is an example of how you can use this module in your inventory structure:
-```hcl
-module "virtual-network" {
- source              = "clouddrove/vnet/azure"
- name                = "app"
- environment         = "test"
- label_order         = ["name", "environment"]
- resource_group_name = module.resource_group.resource_group_name
- location            = module.resource_group.resource_group_location
- address_space       = "10.0.0.0/16"
- enable_ddos_pp      = false
- }
+  ```hcl
+  module "network_security_group" {
+    source              = "clouddrove/network-security-group/azure"
+    version             = "1.0.0"
+    name                = "example"
+    environment         = "test"
+    label_order         = ["name","environment"]
+    resource_group_name = module.resource_group.resource_group_name
+    location            = module.resource_group.resource_group_location
+    custom_port         = [{
+    name                         = "ssh"
+    protocol                     = "Tcp"
+    source_port_range            = "*"
+    destination_port_ranges      = ["22"]
+    source_address_prefixes      = ["67.23.123.234/32"]
+    destination_address_prefixes = ["0.0.0.0/0"]
+    access                       = "Allow"
+    priority                     = 1002
+    },
+    {
+    name                         = "http-https"
+    protocol                     = "Tcp"
+    source_port_range            = "*"
+    destination_port_ranges      = ["80","443"]
+    source_address_prefixes      = ["0.0.0.0/0"]
+    destination_address_prefixes = ["0.0.0.0/0"]
+    access                       = "Allow"
+    priority                     = 1003
+    }]
+  }
   ```
 
 
@@ -92,32 +113,34 @@ module "virtual-network" {
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| address\_space | The address space that is used by the virtual network. | `string` | `""` | no |
-| address\_spaces | The list of the address spaces that is used by the virtual network. | `list(string)` | `[]` | no |
-| attributes | Additional attributes (e.g. `1`). | `list(any)` | `[]` | no |
-| delimiter | Delimiter to be used between `organization`, `environment`, `name` and `attributes`. | `string` | `"-"` | no |
-| dns\_servers | The DNS servers to be used with vNet. | `list(string)` | `[]` | no |
-| enable | Flag to control the module creation | `bool` | `true` | no |
-| enable\_ddos\_pp | Flag to control the resource creation | `bool` | `false` | no |
+| app\_name | Name  (e.g. `app` or `cluster`). | `string` | `""` | no |
+| attributes | Additional attributes (e.g. `1`). | `list(string)` | `[]` | no |
+| business\_unit | Top-level division of your company that owns the subscription or workload that the resource belongs to. In smaller organizations, this tag might represent a single corporate or shared top-level organizational element. | `string` | `"Corp"` | no |
+| create | Used when creating the Resource Group. | `string` | `"30m"` | no |
+| delete | Used when deleting the Resource Group. | `string` | `"30m"` | no |
+| enabled | Set to false to prevent the module from creating any resources. | `bool` | `true` | no |
 | environment | Environment (e.g. `prod`, `dev`, `staging`). | `string` | `""` | no |
-| label\_order | Label order, e.g. `name`,`application`. | `list(any)` | `[]` | no |
-| location | The location/region where the virtual network is created. Changing this forces a new resource to be created. | `string` | `""` | no |
+| extra\_tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`). | `map(string)` | `{}` | no |
+| inbound\_rules | List of objects that represent the configuration of each inbound rule. | `list(map(string))` | `[]` | no |
+| label\_order | Label order, e.g. sequence of application name and environment `name`,`environment`,'attribute' [`webserver`,`qa`,`devops`,`public`,] . | `list(any)` | `[]` | no |
 | managedby | ManagedBy, eg 'CloudDrove'. | `string` | `"hello@clouddrove.com"` | no |
 | name | Name  (e.g. `app` or `cluster`). | `string` | `""` | no |
-| repository | Terraform current module repo | `string` | `"https://github.com/clouddrove/terraform-azure-virtual-network"` | no |
-| resource\_group\_name | The name of the resource group in which to create the virtual network. Changing this forces a new resource to be created. | `string` | `""` | no |
-| tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`). | `map(any)` | `{}` | no |
+| outbound\_rules | List of objects that represent the configuration of each outbound rule. | `list(map(string))` | `[]` | no |
+| read | Used when retrieving the Resource Group. | `string` | `"5m"` | no |
+| repository | Terraform current module repo | `string` | `""` | no |
+| resource\_group\_location | The Location of the resource group where to create the network security group. | `string` | n/a | yes |
+| resource\_group\_name | The name of the resource group in which to create the network security group. | `string` | n/a | yes |
+| subnet\_ids | The ID of the Subnet. Changing this forces a new resource to be created. | `list(string)` | `[]` | no |
+| tags | A mapping of tags to assign to the resource. | `map(string)` | `{}` | no |
+| update | Used when updating the Resource Group. | `string` | `"30m"` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| vnet\_address\_space | The address space of the newly created vNet |
-| vnet\_guid | The GUID of the virtual network. |
-| vnet\_id | The id of the newly created vNet |
-| vnet\_location | The location of the newly created vNet |
-| vnet\_name | The name of the newly created vNet |
-| vnet\_rg\_name | The name of the resource group in which to create the virtual network. Changing this forces a new resource to be created |
+| id | The network security group configuration ID. |
+| name | The name of the network security group. |
+| tags | The tags assigned to the resource. |
 
 
 
@@ -133,9 +156,9 @@ You need to run the following command in the testing folder:
 
 
 ## Feedback 
-If you come accross a bug or have any feedback, please log it in our [issue tracker](https://github.com/clouddrove/terraform-azure-vnet/issues), or feel free to drop us an email at [hello@clouddrove.com](mailto:hello@clouddrove.com).
+If you come accross a bug or have any feedback, please log it in our [issue tracker](https://github.com/clouddrove/terraform-azure-network-security-group/issues), or feel free to drop us an email at [hello@clouddrove.com](mailto:hello@clouddrove.com).
 
-If you have found it worth your time, go ahead and give us a ★ on [our GitHub](https://github.com/clouddrove/terraform-azure-vnet)!
+If you have found it worth your time, go ahead and give us a ★ on [our GitHub](https://github.com/clouddrove/terraform-azure-network-security-group)!
 
 ## About us
 
