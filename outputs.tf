@@ -9,15 +9,15 @@ output "name" {
 }
 
 
-output "outbound_rule_name" {
-  value       = join("", azurerm_network_security_rule.outbound.*.name)
-  description = "The Name of the Outbound Network Security Rule."
-}
+# output "outbound_rule_name" {
+#   value       = join("", azurerm_network_security_rule.outbound.*.name)
+#   description = "The Name of the Outbound Network Security Rule."
+# }
 
-output "inbound_custom_rule_name" {
-  value       = join("", azurerm_network_security_rule.inbound.*.name)
-  description = "The Name of the Inbound Network Security Rule."
-}
+# output "inbound_custom_rule_name" {
+#   value       = join("", azurerm_network_security_rule.inbound.*.name)
+#   description = "The Name of the Inbound Network Security Rule."
+# }
 
 output "tags" {
   value       = module.labels.tags
