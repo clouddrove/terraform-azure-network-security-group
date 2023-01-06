@@ -1,21 +1,15 @@
 #Module      : LABEL
 #Description : Terraform label module variables.
-variable "name" {
+variable "app_name" {
   type        = string
   default     = ""
   description = "Name  (e.g. `app` or `cluster`)."
 }
 
-variable "repository" {
+variable "name" {
   type        = string
-  default     = "https://github.com/clouddrove/terraform-azure-nsg"
-  description = "Terraform current module repo"
-
-  validation {
-    # regex(...) fails if it cannot find a match
-    condition     = can(regex("^https://", var.repository))
-    error_message = "The module-repo value must be a valid Git repo link."
-  }
+  default     = ""
+  description = "Name  (e.g. `app` or `cluster`)."
 }
 
 variable "environment" {
@@ -24,119 +18,72 @@ variable "environment" {
   description = "Environment (e.g. `prod`, `dev`, `staging`)."
 }
 
+variable "repository" {
+  type        = string
+  default     = ""
+  description = "Terraform current module repo"
+}
+
+variable "business_unit" {
+  type        = string
+  default     = "Corp"
+  description = "Top-level division of your company that owns the subscription or workload that the resource belongs to. In smaller organizations, this tag might represent a single corporate or shared top-level organizational element."
+}
+
 variable "label_order" {
   type        = list(any)
   default     = []
-  description = "Label order, e.g. `name`,`application`."
+  description = "Label order, e.g. sequence of application name and environment `name`,`environment`,'attribute' [`webserver`,`qa`,`devops`,`public`,] ."
 }
 
 variable "attributes" {
-  type        = list(any)
+  type        = list(string)
   default     = []
   description = "Additional attributes (e.g. `1`)."
 }
 
-variable "delimiter" {
-  type        = string
-  default     = "-"
-  description = "Delimiter to be used between `organization`, `environment`, `name` and `attributes`."
-}
-
-variable "tags" {
-  type        = map(any)
+variable "extra_tags" {
+  type        = map(string)
   default     = {}
   description = "Additional tags (e.g. map(`BusinessUnit`,`XYZ`)."
 }
 
-variable "managedby" {
+variable "resource_group_name" {
   type        = string
-  default     = "hello@clouddrove.com"
-  description = "ManagedBy, eg 'CloudDrove'."
+  description = "The name of the resource group in which to create the network security group."
+}
+
+variable "resource_group_location" {
+  type        = string
+  description = "The Location of the resource group where to create the network security group."
+}
+
+variable "tags" {
+  type        = map(string)
+  default     = {}
+  description = "A mapping of tags to assign to the resource."
 }
 
 variable "enabled" {
   type        = bool
   default     = true
-  description = "Flag to control the module creation"
+  description = "Set to false to prevent the module from creating any resources."
 }
 
-## Virtual Network
-variable "resource_group_name" {
-  type        = string
-  default     = ""
-  description = "The name of the resource group in which to create the virtual network."
-}
-
-variable "location" {
-  type        = string
-  default     = ""
-  description = "Location where resource should be created."
-}
-
-variable "create" {
-  type        = string
-  default     = "30m"
-  description = "Used when creating the Resource Group."
-}
-
-variable "update" {
-  type        = string
-  default     = "30m"
-  description = "Used when updating the Resource Group."
-}
-
-variable "read" {
-  type        = string
-  default     = "5m"
-  description = "Used when retrieving the Resource Group."
-}
-
-variable "delete" {
-  type        = string
-  default     = "30m"
-  description = "Used when deleting the Resource Group."
-}
-
-variable "source_application_security_group_ids" {
-  type        = list(any)
+variable "inbound_rules" {
+  type        = list(map(string))
   default     = []
-  description = "A List of source Application Security Group ID's."
+  description = "List of objects that represent the configuration of each inbound rule."
 }
 
-variable "destination_application_security_group_ids" {
-  type        = list(any)
+variable "outbound_rules" {
+  type        = list(map(string))
   default     = []
-  description = "A List of destination Application Security Group ID's."
+  description = "List of objects that represent the configuration of each outbound rule."
 }
 
-variable "access" {
-  type        = string
-  default     = "Allow"
-  description = "Specifies whether network traffic is allowed or denied. Possible values are Allow and Deny."
-}
-
-variable "priority" {
-  type        = number
-  default     = 1001
-  description = "Specifies the priority of the rule. The value can be between 100 and 4096."
-}
-
-variable "custom_port" {
-  type        = list(any)
-  description = <<-DOC
-    A list of maps of custom port.
-    name:
-    protocol:
-    source_port_range:
-    destination_port_ranges:
-    source_address_prefixes:
-    source_application_security_group_ids:
-    destination_address_prefixes: for list of ip address
-    destination_address_prefix : for all ip address(*) or Virtualnetwork
-    destination_application_security_group_ids:
-    access:
-    priority:
-    tags:
-  DOC
+variable "subnet_ids" {
+  type        = list(string)
   default     = []
+  description = "The ID of the Subnet. Changing this forces a new resource to be created."
 }

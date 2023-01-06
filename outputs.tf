@@ -1,24 +1,14 @@
-output "security_group_id" {
-  value       = join("", azurerm_network_security_group.default.*.id)
-  description = "Specifies the name of the network security group. Changing this forces a new resource to be created."
+output "id" {
+  value       = join("", azurerm_network_security_group.nsg.*.id)
+  description = "The network security group configuration ID."
 }
 
-output "security_group_name" {
-  value       = join("", azurerm_network_security_group.default.*.name)
-  description = "The name of the resource group in which to create the network security group. Changing this forces a new resource to be created."
-}
-
-output "outbound_rule_name" {
-  value       = join("", azurerm_network_security_rule.outbound.*.name)
-  description = "The Name of the Outbound Network Security Rule."
-}
-
-output "inbound_custom_rule_name" {
-  value       = { for cp in flatten(var.custom_port) : cp.name => cp }
-  description = "The Name of the Inbound Network Security Rule."
+output "name" {
+  value       = join("", azurerm_network_security_group.nsg.*.name)
+  description = "The name of the network security group."
 }
 
 output "tags" {
   value       = module.labels.tags
-  description = "The tags associated to resources."
+  description = "The tags assigned to the resource."
 }
