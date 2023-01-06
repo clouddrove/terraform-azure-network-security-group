@@ -18,6 +18,12 @@ variable "environment" {
   description = "Environment (e.g. `prod`, `dev`, `staging`)."
 }
 
+variable "managedby" {
+  type        = string
+  default     = "hello@clouddrove.com"
+  description = "ManagedBy, eg 'CloudDrove'."
+}
+
 variable "repository" {
   type        = string
   default     = ""
@@ -86,4 +92,28 @@ variable "subnet_ids" {
   type        = list(string)
   default     = []
   description = "The ID of the Subnet. Changing this forces a new resource to be created."
+}
+
+variable "create" {
+  type        = string
+  default     = "30m"
+  description = "Used when creating the Resource Group."
+}
+
+variable "update" {
+  type        = string
+  default     = "30m"
+  description = "Used when updating the Resource Group."
+}
+
+variable "read" {
+  type        = string
+  default     = "5m"
+  description = "Used when retrieving the Resource Group."
+}
+
+variable "delete" {
+  type        = string
+  default     = "30m"
+  description = "Used when deleting the Resource Group."
 }
