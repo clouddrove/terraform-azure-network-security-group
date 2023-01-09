@@ -73,35 +73,41 @@ This module has a few dependencies:
 ### Simple Example
 Here is an example of how you can use this module in your inventory structure:
   ```hcl
-  module "network_security_group" {
-    source              = "clouddrove/network-security-group/azure"
-    version             = "1.0.0"
-    name                = "example"
-    environment         = "test"
-    label_order         = ["name","environment"]
-    resource_group_name = module.resource_group.resource_group_name
-    location            = module.resource_group.resource_group_location
-    custom_port         = [{
-    name                         = "ssh"
-    protocol                     = "Tcp"
-    source_port_range            = "*"
-    destination_port_ranges      = ["22"]
-    source_address_prefixes      = ["67.23.123.234/32"]
-    destination_address_prefixes = ["0.0.0.0/0"]
-    access                       = "Allow"
-    priority                     = 1002
-    },
-    {
-    name                         = "http-https"
-    protocol                     = "Tcp"
-    source_port_range            = "*"
-    destination_port_ranges      = ["80","443"]
-    source_address_prefixes      = ["0.0.0.0/0"]
-    destination_address_prefixes = ["0.0.0.0/0"]
-    access                       = "Allow"
-    priority                     = 1003
-    }]
-  }
+   module "network_security_group" {
+    source                  = "clouddrove/subnet/network-security-group"
+    version                 = "1.0.0"
+    resource_group_location = module.resource_group.resource_group_location
+    source                  = "../"
+    label_order             = ["name", "environment"]
+    app_name                = "app"
+    environment             = "test"
+    subnet_ids              = module.subnet.default_subnet_id
+    resource_group_name     = module.resource_group.resource_group_name
+    inbound_rules = [
+     {
+     name = "ssh" 
+     priority = 101
+     access = "Allow"
+     protocol = "Tcp"
+     source_address_prefix = "67.23.123.234/32"
+     source_port_range = "*"
+     destination_address_prefix = "0.0.0.0/0"
+     destination_port_range = "22"
+     description = "ssh allowed port"
+     },
+     {
+     name = "https" 
+     priority = 102
+     access = "Allow"
+     protocol = "Tcp"
+     source_address_prefix = "*"
+     source_port_range = "*"
+     destination_address_prefix = "0.0.0.0/0"
+     destination_port_range = "22"
+     description = "ssh allowed port"
+      }
+     ]
+    }
   ```
 
 
