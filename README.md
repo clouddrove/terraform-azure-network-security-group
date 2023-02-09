@@ -119,7 +119,6 @@ Here is an example of how you can use this module in your inventory structure:
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| app\_name | Name  (e.g. `app` or `cluster`). | `string` | `""` | no |
 | attributes | Additional attributes (e.g. `1`). | `list(string)` | `[]` | no |
 | business\_unit | Top-level division of your company that owns the subscription or workload that the resource belongs to. In smaller organizations, this tag might represent a single corporate or shared top-level organizational element. | `string` | `"Corp"` | no |
 | create | Used when creating the Resource Group. | `string` | `"30m"` | no |
