@@ -58,7 +58,7 @@ module "network_security_group" {
   resource_group_location = module.resource_group.resource_group_location
   source                  = "../"
   label_order             = ["name", "environment"]
-  app_name                = "app"
+  name                    = "app"
   environment             = "test"
   subnet_ids              = module.subnet.default_subnet_id
   resource_group_name     = module.resource_group.resource_group_name
