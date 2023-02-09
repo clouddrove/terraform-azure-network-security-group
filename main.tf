@@ -17,7 +17,7 @@ module "labels" {
 #Description : Terraform resource for security group.
 resource "azurerm_network_security_group" "nsg" {
   count               = var.enabled ? 1 : 0
-  name                = format("nsg-%s", module.labels.id)
+  name                = format("%s-nsg", module.labels.id)
   resource_group_name = var.resource_group_name
   location            = var.resource_group_location
   tags                = module.labels.tags
