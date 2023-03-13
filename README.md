@@ -84,30 +84,31 @@ Here is an example of how you can use this module in your inventory structure:
     subnet_ids              = module.subnet.default_subnet_id
     resource_group_name     = module.resource_group.resource_group_name
     inbound_rules = [
-     {
-     name = "ssh" 
-     priority = 101
-     access = "Allow"
-     protocol = "Tcp"
-     source_address_prefix = "67.23.123.234/32"
-     source_port_range = "*"
-     destination_address_prefix = "0.0.0.0/0"
-     destination_port_range = "22"
-     description = "ssh allowed port"
-     },
-     {
-     name = "https" 
-     priority = 102
-     access = "Allow"
-     protocol = "Tcp"
-     source_address_prefix = "*"
-     source_port_range = "*"
-     destination_address_prefix = "0.0.0.0/0"
-     destination_port_range = "22"
-     description = "ssh allowed port"
+    {
+      name                       = "ssh"
+      priority                   = 101
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_address_prefix      = "67.23.123.234/32"
+      #source_address_prefixes    = ["67.23.123.234/32","67.20.123.234/32"]
+      source_port_range          = "*"
+      destination_address_prefix = "0.0.0.0/0"
+      destination_port_range     = "22"
+      description                = "ssh allowed port"
+    },
+    {
+      name                       = "https"
+      priority                   = 102
+      access                     = "Allow"
+      protocol                   = "*"
+      source_address_prefix      = "VirtualNetwork"
+      source_port_range          = "80,443"
+      destination_address_prefix = "0.0.0.0/0"
+      destination_port_range     = "22"
+      description                = "ssh allowed port"
       }
-     ]
-    }
+    ]
+  }
   ```
 
 
@@ -126,11 +127,11 @@ Here is an example of how you can use this module in your inventory structure:
 | enabled | Set to false to prevent the module from creating any resources. | `bool` | `true` | no |
 | environment | Environment (e.g. `prod`, `dev`, `staging`). | `string` | `""` | no |
 | extra\_tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`). | `map(string)` | `{}` | no |
-| inbound\_rules | List of objects that represent the configuration of each inbound rule. | `list(map(string))` | `[]` | no |
+| inbound\_rules | List of objects that represent the configuration of each inbound rule. | `any` | `[]` | no |
 | label\_order | Label order, e.g. sequence of application name and environment `name`,`environment`,'attribute' [`webserver`,`qa`,`devops`,`public`,] . | `list(any)` | `[]` | no |
 | managedby | ManagedBy, eg 'CloudDrove'. | `string` | `"hello@clouddrove.com"` | no |
 | name | Name  (e.g. `app` or `cluster`). | `string` | `""` | no |
-| outbound\_rules | List of objects that represent the configuration of each outbound rule. | `list(map(string))` | `[]` | no |
+| outbound\_rules | List of objects that represent the configuration of each outbound rule. | `any` | `[]` | no |
 | read | Used when retrieving the Resource Group. | `string` | `"5m"` | no |
 | repository | Terraform current module repo | `string` | `""` | no |
 | resource\_group\_location | The Location of the resource group where to create the network security group. | `string` | n/a | yes |
