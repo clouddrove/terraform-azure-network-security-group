@@ -53,6 +53,21 @@ module "subnet" {
 
 }
 
+module "log-analytics" {
+  source                           = "clouddrove/log-analytics/azure"
+  version                          = "1.0.0"
+  name                             = "app1"
+  environment                      = "test1"
+  label_order                      = ["name", "environment"]
+  create_log_analytics_workspace   = true
+  log_analytics_workspace_sku      = "PerGB2018"
+  daily_quota_gb                   = "-1"
+  internet_ingestion_enabled       = true
+  internet_query_enabled           = true
+  resource_group_name              = module.resource_group.resource_group_name
+  log_analytics_workspace_location = module.resource_group.resource_group_location
+}
+
 module "network_security_group" {
   depends_on              = [module.subnet]
   resource_group_location = module.resource_group.resource_group_location
@@ -87,4 +102,7 @@ module "network_security_group" {
       description                = "ssh allowed port"
     }
   ]
+
+  enable_diagnostic          = true
+  log_analytics_workspace_id = module.log-analytics.workspace_id
 }
