@@ -71,13 +71,13 @@ variable "enabled" {
 }
 
 variable "inbound_rules" {
-  type        = list(map(string))
+  type        = any
   default     = []
   description = "List of objects that represent the configuration of each inbound rule."
 }
 
 variable "outbound_rules" {
-  type        = list(map(string))
+  type        = any
   default     = []
   description = "List of objects that represent the configuration of each outbound rule."
 }
