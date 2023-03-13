@@ -111,3 +111,47 @@ variable "delete" {
   default     = "30m"
   description = "Used when deleting the Resource Group."
 }
+
+# Diagnosis Settings Enable
+
+variable "enable_diagnostic" {
+  type        = bool
+  default     = false
+  description = "Set to false to prevent the module from creating the diagnosys setting for the NSG Resource.."
+}
+
+variable "storage_account_id" {
+  type        = string
+  default     = null
+  description = "Storage account id to pass it to destination details of diagnosys setting of NSG."
+}
+
+variable "eventhub_name" {
+  type        = string
+  default     = null
+  description = "Eventhub Name to pass it to destination details of diagnosys setting of NSG."
+}
+
+variable "eventhub_authorization_rule_id" {
+  type        = string
+  default     = null
+  description = "Eventhub authorization rule id to pass it to destination details of diagnosys setting of NSG."
+}
+
+variable "log_analytics_workspace_id" {
+  type        = string
+  default     = null
+  description = "log analytics workspace id to pass it to destination details of diagnosys setting of NSG."
+}
+
+variable "retention_policy_enabled" {
+  type        = bool
+  default     = false
+  description = "Set to false to prevent the module from creating retension policy for the diagnosys setting."
+}
+
+variable "days" {
+  type        = number
+  default     = 365
+  description = "Number of days to create retension policies for te diagnosys setting."
+}
