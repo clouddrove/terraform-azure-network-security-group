@@ -53,37 +53,55 @@ module "subnet" {
 
 }
 
+module "log-analytics" {
+  source                           = "clouddrove/log-analytics/azure"
+  version                          = "1.0.0"
+  name                             = "app1"
+  environment                      = "test1"
+  label_order                      = ["name", "environment"]
+  create_log_analytics_workspace   = true
+  log_analytics_workspace_sku      = "PerGB2018"
+  daily_quota_gb                   = "-1"
+  internet_ingestion_enabled       = true
+  internet_query_enabled           = true
+  resource_group_name              = module.resource_group.resource_group_name
+  log_analytics_workspace_location = module.resource_group.resource_group_location
+}
+
 module "network_security_group" {
   depends_on              = [module.subnet]
   resource_group_location = module.resource_group.resource_group_location
   source                  = "../"
   label_order             = ["name", "environment"]
-  name                    = "app"
-  environment             = "test"
+  name                    = "app1"
+  environment             = "test1"
   subnet_ids              = module.subnet.default_subnet_id
   resource_group_name     = module.resource_group.resource_group_name
   inbound_rules = [
     {
-     name = "ssh" 
-     priority = 101
-     access = "Allow"
-     protocol = "Tcp"
-     source_address_prefix = "67.23.123.234/32"
-     source_port_range = "*"
-     destination_address_prefix = "0.0.0.0/0"
-     destination_port_range = "22"
-     description = "ssh allowed port"
-},
+      name                       = "ssh"
+      priority                   = 101
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_address_prefix      = "67.23.123.234/32"
+      source_port_range          = "*"
+      destination_address_prefix = "0.0.0.0/0"
+      destination_port_range     = "22"
+      description                = "ssh allowed port"
+    },
     {
-     name = "https" 
-     priority = 102
-     access = "Allow"
-     protocol = "Tcp"
-     source_address_prefix = "*"
-     source_port_range = "*"
-     destination_address_prefix = "0.0.0.0/0"
-     destination_port_range = "22"
-     description = "ssh allowed port"
-}
-]
+      name                       = "https"
+      priority                   = 102
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_address_prefix      = "*"
+      source_port_range          = "*"
+      destination_address_prefix = "0.0.0.0/0"
+      destination_port_range     = "22"
+      description                = "ssh allowed port"
+    }
+  ]
+
+  enable_diagnostic          = true
+  log_analytics_workspace_id = module.log-analytics.workspace_id
 }
