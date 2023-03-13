@@ -123,12 +123,17 @@ Here is an example of how you can use this module in your inventory structure:
 | attributes | Additional attributes (e.g. `1`). | `list(string)` | `[]` | no |
 | business\_unit | Top-level division of your company that owns the subscription or workload that the resource belongs to. In smaller organizations, this tag might represent a single corporate or shared top-level organizational element. | `string` | `"Corp"` | no |
 | create | Used when creating the Resource Group. | `string` | `"30m"` | no |
+| days | Number of days to create retension policies for te diagnosys setting. | `number` | `365` | no |
 | delete | Used when deleting the Resource Group. | `string` | `"30m"` | no |
+| enable\_diagnostic | Set to false to prevent the module from creating the diagnosys setting for the NSG Resource.. | `bool` | `false` | no |
 | enabled | Set to false to prevent the module from creating any resources. | `bool` | `true` | no |
 | environment | Environment (e.g. `prod`, `dev`, `staging`). | `string` | `""` | no |
+| eventhub\_authorization\_rule\_id | Eventhub authorization rule id to pass it to destination details of diagnosys setting of NSG. | `string` | `null` | no |
+| eventhub\_name | Eventhub Name to pass it to destination details of diagnosys setting of NSG. | `string` | `null` | no |
 | extra\_tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`). | `map(string)` | `{}` | no |
 | inbound\_rules | List of objects that represent the configuration of each inbound rule. | `any` | `[]` | no |
 | label\_order | Label order, e.g. sequence of application name and environment `name`,`environment`,'attribute' [`webserver`,`qa`,`devops`,`public`,] . | `list(any)` | `[]` | no |
+| log\_analytics\_workspace\_id | log analytics workspace id to pass it to destination details of diagnosys setting of NSG. | `string` | `null` | no |
 | managedby | ManagedBy, eg 'CloudDrove'. | `string` | `"hello@clouddrove.com"` | no |
 | name | Name  (e.g. `app` or `cluster`). | `string` | `""` | no |
 | outbound\_rules | List of objects that represent the configuration of each outbound rule. | `any` | `[]` | no |
@@ -136,6 +141,8 @@ Here is an example of how you can use this module in your inventory structure:
 | repository | Terraform current module repo | `string` | `""` | no |
 | resource\_group\_location | The Location of the resource group where to create the network security group. | `string` | n/a | yes |
 | resource\_group\_name | The name of the resource group in which to create the network security group. | `string` | n/a | yes |
+| retention\_policy\_enabled | Set to false to prevent the module from creating retension policy for the diagnosys setting. | `bool` | `false` | no |
+| storage\_account\_id | Storage account id to pass it to destination details of diagnosys setting of NSG. | `string` | `null` | no |
 | subnet\_ids | The ID of the Subnet. Changing this forces a new resource to be created. | `list(string)` | `[]` | no |
 | tags | A mapping of tags to assign to the resource. | `map(string)` | `{}` | no |
 | update | Used when updating the Resource Group. | `string` | `"30m"` | no |
