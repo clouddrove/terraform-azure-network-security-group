@@ -116,7 +116,7 @@ variable "delete" {
 
 variable "enable_diagnostic" {
   type        = bool
-  default     = false
+  default     = true
   description = "Set to false to prevent the module from creating the diagnosys setting for the NSG Resource.."
 }
 

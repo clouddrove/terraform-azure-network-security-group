@@ -28,7 +28,7 @@ module "vnet" {
 
 module "subnet" {
   source  = "clouddrove/subnet/azure"
-  version = "1.0.0"
+  version = "1.0.2"
 
   name                 = "example-subnet"
   resource_group_name  = module.resource_group.resource_group_name
@@ -37,17 +37,12 @@ module "subnet" {
 
   # Subnet Configuration
   subnet_prefixes               = ["10.30.0.0/24"]
-  disable_bgp_route_propagation = false
-
   # routes
-  enable_route_table = true
-
   routes = [
     {
-      name                   = "rt-app-test"
-      address_prefix         = "0.0.0.0/0"
-      next_hop_type          = "VirtualAppliance"
-      next_hop_in_ip_address = "10.20.0.4"
+      name           = "rt-test"
+      address_prefix = "0.0.0.0/0"
+      next_hop_type  = "Internet"
     }
   ]
 
@@ -103,6 +98,5 @@ module "network_security_group" {
     }
   ]
 
-  enable_diagnostic          = true
   log_analytics_workspace_id = module.log-analytics.workspace_id
 }
