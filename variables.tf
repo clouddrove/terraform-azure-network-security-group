@@ -32,7 +32,7 @@ variable "business_unit" {
 
 variable "label_order" {
   type        = list(any)
-  default     = []
+  default     = ["name", "environment"]
   description = "Label order, e.g. sequence of application name and environment `name`,`environment`,'attribute' [`webserver`,`qa`,`devops`,`public`,] ."
 }
 
@@ -154,4 +154,14 @@ variable "days" {
   type        = number
   default     = 365
   description = "Number of days to create retension policies for te diagnosys setting."
+}
+variable "log_analytics_destination_type" {
+  type        = string
+  default     = "AzureDiagnostics"
+  description = "Possible values are AzureDiagnostics and Dedicated, default to AzureDiagnostics. When set to Dedicated, logs sent to a Log Analytics workspace will go into resource specific tables, instead of the legacy AzureDiagnostics table."
+}
+variable "category" {
+  type        = string
+  default     = null
+  description = " The name of a Diagnostic Log Category Group for this Resource."
 }
