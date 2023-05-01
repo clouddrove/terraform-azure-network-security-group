@@ -125,7 +125,7 @@ Here is an example of how you can use this module in your inventory structure:
 | create | Used when creating the Resource Group. | `string` | `"30m"` | no |
 | days | Number of days to create retension policies for te diagnosys setting. | `number` | `365` | no |
 | delete | Used when deleting the Resource Group. | `string` | `"30m"` | no |
-| enable\_diagnostic | Set to false to prevent the module from creating the diagnosys setting for the NSG Resource.. | `bool` | `false` | no |
+| enable\_diagnostic | Set to false to prevent the module from creating the diagnosys setting for the NSG Resource.. | `bool` | `true` | no |
 | enabled | Set to false to prevent the module from creating any resources. | `bool` | `true` | no |
 | environment | Environment (e.g. `prod`, `dev`, `staging`). | `string` | `""` | no |
 | eventhub\_authorization\_rule\_id | Eventhub authorization rule id to pass it to destination details of diagnosys setting of NSG. | `string` | `null` | no |
