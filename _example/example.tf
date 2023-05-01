@@ -36,7 +36,7 @@ module "subnet" {
   virtual_network_name = join("", module.vnet.vnet_name)
 
   # Subnet Configuration
-  subnet_prefixes               = ["10.30.0.0/24"]
+  subnet_prefixes = ["10.30.0.0/24"]
   # routes
   routes = [
     {
