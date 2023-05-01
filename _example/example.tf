@@ -42,6 +42,7 @@ module "subnet" {
   # routes
   enable_route_table = true
   route_table_name   = "default_subnet"
+  # routes
   routes = [
     {
       name           = "rt-test"
@@ -101,6 +102,5 @@ module "network_security_group" {
     }
   ]
 
-  enable_diagnostic          = true
   log_analytics_workspace_id = module.log-analytics.workspace_id
 }
