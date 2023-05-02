@@ -40,11 +40,10 @@ usage: |-
      module "network_security_group" {
       source                  = "clouddrove/subnet/network-security-group"
       version                 = "1.0.0"
-      resource_group_location = module.resource_group.resource_group_location
-      source                  = "../"
-      label_order             = ["name", "environment"]
       app_name                = "app"
       environment             = "test"
+      label_order             = ["name", "environment"]
+      resource_group_location = module.resource_group.resource_group_location
       subnet_ids              = module.subnet.default_subnet_id
       resource_group_name     = module.resource_group.resource_group_name
       inbound_rules = [
