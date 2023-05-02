@@ -76,11 +76,10 @@ Here is an example of how you can use this module in your inventory structure:
    module "network_security_group" {
     source                  = "clouddrove/subnet/network-security-group"
     version                 = "1.0.0"
-    resource_group_location = module.resource_group.resource_group_location
-    source                  = "../"
-    label_order             = ["name", "environment"]
     app_name                = "app"
     environment             = "test"
+    label_order             = ["name", "environment"]
+    resource_group_location = module.resource_group.resource_group_location
     subnet_ids              = module.subnet.default_subnet_id
     resource_group_name     = module.resource_group.resource_group_name
     inbound_rules = [
@@ -122,17 +121,19 @@ Here is an example of how you can use this module in your inventory structure:
 |------|-------------|------|---------|:--------:|
 | attributes | Additional attributes (e.g. `1`). | `list(string)` | `[]` | no |
 | business\_unit | Top-level division of your company that owns the subscription or workload that the resource belongs to. In smaller organizations, this tag might represent a single corporate or shared top-level organizational element. | `string` | `"Corp"` | no |
+| category | The name of a Diagnostic Log Category Group for this Resource. | `string` | `null` | no |
 | create | Used when creating the Resource Group. | `string` | `"30m"` | no |
 | days | Number of days to create retension policies for te diagnosys setting. | `number` | `365` | no |
 | delete | Used when deleting the Resource Group. | `string` | `"30m"` | no |
-| enable\_diagnostic | Set to false to prevent the module from creating the diagnosys setting for the NSG Resource.. | `bool` | `true` | no |
+| enable\_diagnostic | Set to false to prevent the module from creating the diagnosys setting for the NSG Resource.. | `bool` | `false` | no |
 | enabled | Set to false to prevent the module from creating any resources. | `bool` | `true` | no |
 | environment | Environment (e.g. `prod`, `dev`, `staging`). | `string` | `""` | no |
 | eventhub\_authorization\_rule\_id | Eventhub authorization rule id to pass it to destination details of diagnosys setting of NSG. | `string` | `null` | no |
 | eventhub\_name | Eventhub Name to pass it to destination details of diagnosys setting of NSG. | `string` | `null` | no |
 | extra\_tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`). | `map(string)` | `{}` | no |
 | inbound\_rules | List of objects that represent the configuration of each inbound rule. | `any` | `[]` | no |
-| label\_order | Label order, e.g. sequence of application name and environment `name`,`environment`,'attribute' [`webserver`,`qa`,`devops`,`public`,] . | `list(any)` | `[]` | no |
+| label\_order | Label order, e.g. sequence of application name and environment `name`,`environment`,'attribute' [`webserver`,`qa`,`devops`,`public`,] . | `list(any)` | <pre>[<br>  "name",<br>  "environment"<br>]</pre> | no |
+| log\_analytics\_destination\_type | Possible values are AzureDiagnostics and Dedicated, default to AzureDiagnostics. When set to Dedicated, logs sent to a Log Analytics workspace will go into resource specific tables, instead of the legacy AzureDiagnostics table. | `string` | `"AzureDiagnostics"` | no |
 | log\_analytics\_workspace\_id | log analytics workspace id to pass it to destination details of diagnosys setting of NSG. | `string` | `null` | no |
 | managedby | ManagedBy, eg 'CloudDrove'. | `string` | `"hello@clouddrove.com"` | no |
 | name | Name  (e.g. `app` or `cluster`). | `string` | `""` | no |
