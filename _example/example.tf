@@ -15,7 +15,7 @@ module "resource_group" {
 module "vnet" {
   depends_on  = [module.resource_group]
   source      = "clouddrove/vnet/azure"
-  version     = "1.0.1"
+  version     = "1.0.2"
   label_order = ["name", "environment"]
 
   name                = "app"
