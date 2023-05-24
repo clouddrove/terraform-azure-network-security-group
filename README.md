@@ -78,7 +78,6 @@ Here is an example of how you can use this module in your inventory structure:
     version                 = "1.0.0"
     app_name                = "app"
     environment             = "test"
-    label_order             = ["name", "environment"]
     resource_group_location = module.resource_group.resource_group_location
     subnet_ids              = module.subnet.default_subnet_id
     resource_group_name     = module.resource_group.resource_group_name
