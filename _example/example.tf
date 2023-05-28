@@ -80,8 +80,8 @@ module "network_security_group" {
       priority              = 101
       access                = "Allow"
       protocol              = "Tcp"
-      source_address_prefix = "67.23.123.234/32"
-      #source_address_prefixes    = ["67.23.123.234/32","67.20.123.234/32"]
+      source_address_prefix = "10.20.0.0/32"
+      #source_address_prefixes    = ["10.20.0.0/32","10.21.0.0/32"]
       source_port_range          = "*"
       destination_address_prefix = "0.0.0.0/0"
       destination_port_range     = "22"
