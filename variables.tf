@@ -165,3 +165,45 @@ variable "category" {
   default     = null
   description = " The name of a Diagnostic Log Category Group for this Resource."
 }
+
+variable "enable_flow_logs" {
+  type        = bool
+  default     = false
+  description = "Flag to be set true when network security group flow logging feature is to be enabled."
+}
+
+variable "network_watcher_name" {
+  type        = string
+  default     = null
+  description = "The name of the Network Watcher. Changing this forces a new resource to be created."
+}
+
+variable "flow_log_storage_account_id" {
+  type        = string
+  default     = null
+  description = "The id of storage account in which flow logs will be received. Note: Currently, only standard-tier storage accounts are supported."
+}
+
+variable "flow_log_retention_policy_enabled" {
+  type        = bool
+  default     = false
+  description = "Boolean flag to enable/disable retention."
+}
+
+variable "flow_log_retention_policy_days" {
+  type        = number
+  default     = 100
+  description = "The number of days to retain flow log records."
+}
+
+variable "log_analytics_workspace_resource_id" {
+  type        = string
+  default     = null
+  description = "The resource ID of the attached log analytics workspace."
+}
+
+variable "enable_traffic_analytics" {
+  type        = bool
+  default     = false
+  description = "Boolean flag to enable/disable traffic analytics."
+}
