@@ -101,17 +101,18 @@ module "storage" {
 ## Network Security Group module call. 
 ##-----------------------------------------------------------------------------
 module "network_security_group" {
-  depends_on                  = [module.subnet]
-  source                      = "../../"
-  name                        = local.name
-  environment                 = local.environment
-  resource_group_name         = module.resource_group.resource_group_name
-  resource_group_location     = module.resource_group.resource_group_location
-  subnet_ids                  = module.subnet.default_subnet_id
-  enable_flow_logs            = true
-  network_watcher_name        = module.vnet.network_watcher_name
-  flow_log_storage_account_id = module.storage.default_storage_account_id
-  enable_traffic_analytics    = false
+  depends_on                        = [module.subnet]
+  source                            = "../../"
+  name                              = local.name
+  environment                       = local.environment
+  resource_group_name               = module.resource_group.resource_group_name
+  resource_group_location           = module.resource_group.resource_group_location
+  subnet_ids                        = module.subnet.default_subnet_id
+  enable_flow_logs                  = true
+  network_watcher_name              = module.vnet.network_watcher_name
+  flow_log_storage_account_id       = module.storage.default_storage_account_id
+  enable_traffic_analytics          = false
+  flow_log_retention_policy_enabled = true
   inbound_rules = [
     {
       name                  = "ssh"

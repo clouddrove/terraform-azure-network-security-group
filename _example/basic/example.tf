@@ -5,9 +5,9 @@ module "network_security_group" {
   source                  = "../../"
   name                    = "app"
   environment             = "test"
-  resource_group_name     = module.resource_group.resource_group_name
-  resource_group_location = module.resource_group.resource_group_location
-  subnet_ids              = module.subnet.default_subnet_id
+  resource_group_name     = "test-rg"
+  resource_group_location = "CanadaCentral"
+  subnet_ids              = ""
   inbound_rules = [
     {
       name                  = "ssh"
@@ -33,6 +33,5 @@ module "network_security_group" {
       description                = "ssh allowed port"
     }
   ]
-  enable_diagnostic          = true
-  log_analytics_workspace_id = module.log-analytics.workspace_id
+  enable_diagnostic = false
 }

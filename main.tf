@@ -134,7 +134,7 @@ resource "azurerm_network_watcher_flow_log" "nsg_flow_logs" {
 }
 
 ##----------------------------------------------------------------------------- 
-## Below resource will create diagnostic setting for ACR.   
+## Below resource will create diagnostic setting for network security group.  
 ##-----------------------------------------------------------------------------
 resource "azurerm_monitor_diagnostic_setting" "example" {
   count                          = var.enabled && var.enable_diagnostic ? 1 : 0
