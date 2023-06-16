@@ -2,7 +2,6 @@
 ## Network Security Group module call. 
 ##-----------------------------------------------------------------------------
 module "network_security_group" {
-  depends_on              = [module.subnet]
   source                  = "../../"
   name                    = "app"
   environment             = "test"
