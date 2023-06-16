@@ -207,3 +207,9 @@ variable "enable_traffic_analytics" {
   default     = false
   description = "Boolean flag to enable/disable traffic analytics."
 }
+
+variable "flow_log_version" {
+  type        = number
+  default     = 1
+  description = " The version (revision) of the flow log. Possible values are 1 and 2."
+}

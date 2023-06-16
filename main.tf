@@ -111,21 +111,25 @@ resource "azurerm_subnet_network_security_group_association" "example" {
 resource "azurerm_network_watcher_flow_log" "nsg_flow_logs" {
   count                     = var.enabled && var.enable_flow_logs ? 1 : 0
   enabled                   = true
+  version                   = var.flow_log_version
   network_watcher_name      = var.network_watcher_name
   resource_group_name       = var.resource_group_name
   name                      = format("%s-flow_logs", module.labels.id)
-  network_security_group_id = azurerm_network_security_group.nsg.*.id
+  network_security_group_id = join("", azurerm_network_security_group.nsg.*.id)
   storage_account_id        = var.flow_log_storage_account_id
   retention_policy {
     enabled = var.flow_log_retention_policy_enabled
     days    = var.flow_log_retention_policy_days
   }
-  traffic_analytics {
-    enabled               = var.enable_traffic_analytics
-    workspace_id          = var.log_analytics_workspace_id
-    workspace_region      = var.resource_group_location
-    workspace_resource_id = var.log_analytics_workspace_resource_id
-    interval_in_minutes   = 60
+  dynamic "traffic_analytics" {
+    for_each = var.enable_traffic_analytics ? [1] : []
+    content {
+      enabled               = var.enable_traffic_analytics
+      workspace_id          = var.log_analytics_workspace_id
+      workspace_region      = var.resource_group_location
+      workspace_resource_id = var.log_analytics_workspace_resource_id
+      interval_in_minutes   = 60
+    }
   }
 }
 
@@ -142,11 +146,9 @@ resource "azurerm_monitor_diagnostic_setting" "example" {
   log_analytics_workspace_id     = var.log_analytics_workspace_id
   log_analytics_destination_type = var.log_analytics_destination_type
 
-  log {
+  enabled_log {
 
     category_group = "AllLogs"
-    enabled        = true
-
     retention_policy {
       enabled = var.retention_policy_enabled
       days    = var.days

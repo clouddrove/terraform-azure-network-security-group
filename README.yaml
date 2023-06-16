@@ -38,8 +38,7 @@ usage: |-
   Here is an example of how you can use this module in your inventory structure:
     ```hcl
      module "network_security_group" {
-      source                  = "clouddrove/subnet/network-security-group"
-      version                 = "1.0.0"
+      source                  = "clouddrove/network-security-group/azure"
       app_name                = "app"
       environment             = "test"
       resource_group_location = module.resource_group.resource_group_location
