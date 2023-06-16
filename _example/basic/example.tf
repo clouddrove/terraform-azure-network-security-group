@@ -7,7 +7,7 @@ module "network_security_group" {
   environment             = "test"
   resource_group_name     = "test-rg"
   resource_group_location = "CanadaCentral"
-  subnet_ids              = ""
+  subnet_ids              = ["/subscription/***************"]
   inbound_rules = [
     {
       name                  = "ssh"
