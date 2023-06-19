@@ -74,8 +74,7 @@ This module has a few dependencies:
 Here is an example of how you can use this module in your inventory structure:
   ```hcl
    module "network_security_group" {
-    source                  = "clouddrove/subnet/network-security-group"
-    version                 = "1.0.0"
+    source                  = "clouddrove/network-security-group/azure"
     app_name                = "app"
     environment             = "test"
     resource_group_location = module.resource_group.resource_group_location
@@ -125,17 +124,25 @@ Here is an example of how you can use this module in your inventory structure:
 | days | Number of days to create retension policies for te diagnosys setting. | `number` | `365` | no |
 | delete | Used when deleting the Resource Group. | `string` | `"30m"` | no |
 | enable\_diagnostic | Set to false to prevent the module from creating the diagnosys setting for the NSG Resource.. | `bool` | `false` | no |
+| enable\_flow\_logs | Flag to be set true when network security group flow logging feature is to be enabled. | `bool` | `false` | no |
+| enable\_traffic\_analytics | Boolean flag to enable/disable traffic analytics. | `bool` | `false` | no |
 | enabled | Set to false to prevent the module from creating any resources. | `bool` | `true` | no |
 | environment | Environment (e.g. `prod`, `dev`, `staging`). | `string` | `""` | no |
 | eventhub\_authorization\_rule\_id | Eventhub authorization rule id to pass it to destination details of diagnosys setting of NSG. | `string` | `null` | no |
 | eventhub\_name | Eventhub Name to pass it to destination details of diagnosys setting of NSG. | `string` | `null` | no |
 | extra\_tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`). | `map(string)` | `{}` | no |
+| flow\_log\_retention\_policy\_days | The number of days to retain flow log records. | `number` | `100` | no |
+| flow\_log\_retention\_policy\_enabled | Boolean flag to enable/disable retention. | `bool` | `false` | no |
+| flow\_log\_storage\_account\_id | The id of storage account in which flow logs will be received. Note: Currently, only standard-tier storage accounts are supported. | `string` | `null` | no |
+| flow\_log\_version | The version (revision) of the flow log. Possible values are 1 and 2. | `number` | `1` | no |
 | inbound\_rules | List of objects that represent the configuration of each inbound rule. | `any` | `[]` | no |
 | label\_order | Label order, e.g. sequence of application name and environment `name`,`environment`,'attribute' [`webserver`,`qa`,`devops`,`public`,] . | `list(any)` | <pre>[<br>  "name",<br>  "environment"<br>]</pre> | no |
 | log\_analytics\_destination\_type | Possible values are AzureDiagnostics and Dedicated, default to AzureDiagnostics. When set to Dedicated, logs sent to a Log Analytics workspace will go into resource specific tables, instead of the legacy AzureDiagnostics table. | `string` | `"AzureDiagnostics"` | no |
 | log\_analytics\_workspace\_id | log analytics workspace id to pass it to destination details of diagnosys setting of NSG. | `string` | `null` | no |
+| log\_analytics\_workspace\_resource\_id | The resource ID of the attached log analytics workspace. | `string` | `null` | no |
 | managedby | ManagedBy, eg 'CloudDrove'. | `string` | `"hello@clouddrove.com"` | no |
 | name | Name  (e.g. `app` or `cluster`). | `string` | `""` | no |
+| network\_watcher\_name | The name of the Network Watcher. Changing this forces a new resource to be created. | `string` | `null` | no |
 | outbound\_rules | List of objects that represent the configuration of each outbound rule. | `any` | `[]` | no |
 | read | Used when retrieving the Resource Group. | `string` | `"5m"` | no |
 | repository | Terraform current module repo | `string` | `""` | no |
