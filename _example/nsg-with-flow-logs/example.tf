@@ -70,7 +70,7 @@ module "subnet" {
 ##-----------------------------------------------------------------------------
 module "storage" {
   source               = "clouddrove/storage/azure"
-  version              = "1.0.8"
+  version              = "1.0.9"
   name                 = local.name
   environment          = local.environment
   default_enabled      = true
