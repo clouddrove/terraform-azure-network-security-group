@@ -44,17 +44,16 @@ usage: |-
       source                  = "clouddrove/network-security-group/azure"
       name                    = local.name
       environment             = local.environment
-      resource_group_name     = "test-rg"
-      resource_group_location = "CanadaCentral"
+      resource_group_name     = "app-storage-test-resource-group"
+      resource_group_location = "North Europe"
       subnet_ids              = ["/subscriptions/068245d4-3c94-42fe-9c4d-9e5e1cabc60c/resourceGroups/"]
       inbound_rules = [
         {
-          name                  = "ssh"
-          priority              = 101
-          access                = "Allow"
-          protocol              = "Tcp"
-          source_address_prefix = "10.20.0.0/32"
-          #source_address_prefixes    = ["10.20.0.0/32","10.21.0.0/32"]
+          name                       = "ssh"
+          priority                   = 101
+          access                     = "Allow"
+          protocol                   = "Tcp"
+          source_address_prefix      = "10.20.0.0/32"
           source_port_range          = "*"
           destination_address_prefix = "0.0.0.0/0"
           destination_port_range     = "22"
@@ -78,9 +77,9 @@ usage: |-
 
   ### complete Example
   ```hcl
-    module "vnet" {
+    module "network_security_group" {
     depends_on              = [module.subnet]
-    source                 = "clouddrove/vnet/azure"
+      source                = "clouddrove/network-security-group/azure"
     name                    = local.name
     environment             = local.environment
     resource_group_name     = module.resource_group.resource_group_name
@@ -117,9 +116,9 @@ usage: |-
 
   ### nsg-with-flow-logs Example
   ```hcl
-    module "vnet" {
+    module "network_security_group" {
     depends_on                        = [module.subnet]
-    source                            = "clouddrove/vnet/azure"
+          source                      = "clouddrove/network-security-group/azure"
     name                              = local.name
     environment                       = local.environment
     resource_group_name               = module.resource_group.resource_group_name
@@ -132,12 +131,11 @@ usage: |-
     flow_log_retention_policy_enabled = true
     inbound_rules = [
       {
-        name                  = "ssh"
-        priority              = 101
-        access                = "Allow"
-        protocol              = "Tcp"
-        source_address_prefix = "10.20.0.0/32"
-        #source_address_prefixes    = ["10.20.0.0/32","10.21.0.0/32"]
+        name                       = "ssh"
+        priority                   = 101
+        access                     = "Allow"
+        protocol                   = "Tcp"
+        source_address_prefix      = "10.20.0.0/32"
         source_port_range          = "*"
         destination_address_prefix = "0.0.0.0/0"
         destination_port_range     = "22"

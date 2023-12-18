@@ -15,7 +15,7 @@ module "network_security_group" {
   environment             = local.environment
   resource_group_name     = "app-storage-test-resource-group"
   resource_group_location = "North Europe"
-  subnet_ids              = ["/subscriptions/068245d4-3c94-42fe-9c4d-9e5e1cabc60c/resourceGroups/app-storage-test-resource-group/providers/Microsoft.Network/virtualNetworks/app-storage-test-vnet/subnets/app-storage-subnet1"]
+  subnet_ids              = ["/subscriptions/068245d4-3c94-42fe-9c4d-9e5e1cabc60c/resourceGroups/"]
   inbound_rules = [
     {
       name                       = "ssh"
