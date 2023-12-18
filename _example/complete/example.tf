@@ -8,7 +8,7 @@ locals {
   label_order = ["name", "environment"]
 }
 
-##----------------------------------------------------------------------------- 
+##-----------------------------------------------------------------------------
 ## Resource Group module call
 ## Resource group in which all resources will be deployed.
 ##-----------------------------------------------------------------------------
@@ -21,7 +21,7 @@ module "resource_group" {
   location    = "Canada Central"
 }
 
-##----------------------------------------------------------------------------- 
+##-----------------------------------------------------------------------------
 ## Virtual Network module call.
 ##-----------------------------------------------------------------------------
 module "vnet" {
@@ -35,9 +35,9 @@ module "vnet" {
   address_space       = "10.30.0.0/22"
 }
 
-##----------------------------------------------------------------------------- 
-## Subnet Module call. 
-## Subnet to which network security group will be attached. 
+##-----------------------------------------------------------------------------
+## Subnet Module call.
+## Subnet to which network security group will be attached.
 ##-----------------------------------------------------------------------------
 module "subnet" {
   source               = "clouddrove/subnet/azure"
@@ -63,9 +63,9 @@ module "subnet" {
   ]
 }
 
-##----------------------------------------------------------------------------- 
-## Log Analytics module call. 
-## Log Analytics workspace in which network security group diagnostic setting logs will be received. 
+##-----------------------------------------------------------------------------
+## Log Analytics module call.
+## Log Analytics workspace in which network security group diagnostic setting logs will be received.
 ##-----------------------------------------------------------------------------
 module "log-analytics" {
   source                           = "clouddrove/log-analytics/azure"
@@ -81,8 +81,8 @@ module "log-analytics" {
   log_analytics_workspace_id = module.log-analytics.workspace_id
 }
 
-##----------------------------------------------------------------------------- 
-## Network Security Group module call. 
+##-----------------------------------------------------------------------------
+## Network Security Group module call.
 ##-----------------------------------------------------------------------------
 module "network_security_group" {
   depends_on              = [module.subnet]
@@ -94,12 +94,11 @@ module "network_security_group" {
   subnet_ids              = module.subnet.default_subnet_id
   inbound_rules = [
     {
-      name                  = "ssh"
-      priority              = 101
-      access                = "Allow"
-      protocol              = "Tcp"
-      source_address_prefix = "10.20.0.0/32"
-      #source_address_prefixes    = ["10.20.0.0/32","10.21.0.0/32"]
+      name                       = "ssh"
+      priority                   = 101
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_address_prefix      = "10.20.0.0/32"
       source_port_range          = "*"
       destination_address_prefix = "0.0.0.0/0"
       destination_port_range     = "22"

@@ -35,7 +35,7 @@ output "route_table_id" {
 
 output "route_table_associated_subnets" {
   description = "The collection of Subnets associated with this route table."
-  value       = module.subnet.*.route_table_associated_subnets[0]
+  value       = module.subnet[*].route_table_associated_subnets
 }
 
 output "security_group_id" {

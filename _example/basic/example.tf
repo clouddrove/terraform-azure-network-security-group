@@ -1,21 +1,28 @@
-##----------------------------------------------------------------------------- 
-## Network Security Group module call. 
+provider "azurerm" {
+  features {}
+}
+locals {
+  name        = "app"
+  environment = "test"
+}
+
+##-----------------------------------------------------------------------------
+## Network Security Group module call.
 ##-----------------------------------------------------------------------------
 module "network_security_group" {
   source                  = "../../"
-  name                    = "app"
-  environment             = "test"
-  resource_group_name     = "test-rg"
-  resource_group_location = "CanadaCentral"
-  subnet_ids              = ["/subscription/***************"]
+  name                    = local.name
+  environment             = local.environment
+  resource_group_name     = "app-storage-test-resource-group"
+  resource_group_location = "North Europe"
+  subnet_ids              = ["/subscriptions/068245d4-3c94-42fe-9c4d-9e5e1cabc60c/resourceGroups/app-storage-test-resource-group/providers/Microsoft.Network/virtualNetworks/app-storage-test-vnet/subnets/app-storage-subnet1"]
   inbound_rules = [
     {
-      name                  = "ssh"
-      priority              = 101
-      access                = "Allow"
-      protocol              = "Tcp"
-      source_address_prefix = "10.20.0.0/32"
-      #source_address_prefixes    = ["10.20.0.0/32","10.21.0.0/32"]
+      name                       = "ssh"
+      priority                   = 101
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_address_prefix      = "10.20.0.0/32"
       source_port_range          = "*"
       destination_address_prefix = "0.0.0.0/0"
       destination_port_range     = "22"

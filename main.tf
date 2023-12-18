@@ -1,9 +1,4 @@
 ##-----------------------------------------------------------------------------
-## Managed By : CloudDrove
-## Copyright @ CloudDrove. All Right Reserved.
-##-----------------------------------------------------------------------------
-
-##-----------------------------------------------------------------------------
 ## Module      : labels
 ## Description : Terraform module to create consistent naming for multiple names.
 ##-----------------------------------------------------------------------------
@@ -18,7 +13,7 @@ module "labels" {
 }
 
 ##-----------------------------------------------------------------------------
-## Below resource will create network security group in azure. 
+## Below resource will create network security group in azure.
 ##-----------------------------------------------------------------------------
 resource "azurerm_network_security_group" "nsg" {
   count               = var.enabled ? 1 : 0
@@ -36,12 +31,12 @@ resource "azurerm_network_security_group" "nsg" {
 }
 
 ##-----------------------------------------------------------------------------
-## Below resource will create network security group inbound rules in azure and will be attached to above network security group.  
+## Below resource will create network security group inbound rules in azure and will be attached to above network security group.
 ##-----------------------------------------------------------------------------
 resource "azurerm_network_security_rule" "inbound" {
   for_each                     = { for rule in var.inbound_rules : rule.name => rule }
   resource_group_name          = var.resource_group_name
-  network_security_group_name  = join("", azurerm_network_security_group.nsg.*.name)
+  network_security_group_name  = join("", azurerm_network_security_group.nsg[*].name)
   direction                    = "Inbound"
   name                         = each.value.name
   priority                     = each.value.priority
@@ -66,12 +61,12 @@ resource "azurerm_network_security_rule" "inbound" {
 }
 
 ##-----------------------------------------------------------------------------
-## Below resource will create network security group outbound rules in azure and will be attached to above network security group.  
+## Below resource will create network security group outbound rules in azure and will be attached to above network security group.
 ##-----------------------------------------------------------------------------
 resource "azurerm_network_security_rule" "outbound" {
   for_each                     = { for rule in var.outbound_rules : rule.name => rule }
   resource_group_name          = var.resource_group_name
-  network_security_group_name  = join("", azurerm_network_security_group.nsg.*.name)
+  network_security_group_name  = join("", azurerm_network_security_group.nsg[*].name)
   direction                    = "Outbound"
   name                         = each.value.name
   priority                     = each.value.priority
@@ -96,26 +91,26 @@ resource "azurerm_network_security_rule" "outbound" {
 }
 
 ##-----------------------------------------------------------------------------
-## Below resource will associate above created network security group to subnet. 
+## Below resource will associate above created network security group to subnet.
 ##-----------------------------------------------------------------------------
 resource "azurerm_subnet_network_security_group_association" "example" {
   count                     = var.enabled ? length(var.subnet_ids) : 0
   subnet_id                 = element(var.subnet_ids, count.index)
-  network_security_group_id = join("", azurerm_network_security_group.nsg.*.id)
+  network_security_group_id = join("", azurerm_network_security_group.nsg[*].id)
 }
 
 ##-----------------------------------------------------------------------------
-## Below resource will create network watcher flow logs for network security group. 
+## Below resource will create network watcher flow logs for network security group.
 ## Network security groups flow logging is a feature of Azure Network Watcher that allows you to log information about IP traffic flowing through a network security group.
 ##-----------------------------------------------------------------------------
 resource "azurerm_network_watcher_flow_log" "nsg_flow_logs" {
   count                     = var.enabled && var.enable_flow_logs ? 1 : 0
-  enabled                   = true
+  name                      = format("%s-flow_logs", module.labels.id)
+  enabled                   = var.enabled
   version                   = var.flow_log_version
   network_watcher_name      = var.network_watcher_name
   resource_group_name       = var.resource_group_name
-  name                      = format("%s-flow_logs", module.labels.id)
-  network_security_group_id = join("", azurerm_network_security_group.nsg.*.id)
+  network_security_group_id = join("", azurerm_network_security_group.nsg[*].id)
   storage_account_id        = var.flow_log_storage_account_id
   retention_policy {
     enabled = var.flow_log_retention_policy_enabled
@@ -133,8 +128,8 @@ resource "azurerm_network_watcher_flow_log" "nsg_flow_logs" {
   }
 }
 
-##----------------------------------------------------------------------------- 
-## Below resource will create diagnostic setting for network security group.  
+##-----------------------------------------------------------------------------
+## Below resource will create diagnostic setting for network security group.
 ##-----------------------------------------------------------------------------
 resource "azurerm_monitor_diagnostic_setting" "example" {
   count                          = var.enabled && var.enable_diagnostic ? 1 : 0
@@ -147,13 +142,8 @@ resource "azurerm_monitor_diagnostic_setting" "example" {
   log_analytics_destination_type = var.log_analytics_destination_type
 
   enabled_log {
-
     category_group = "AllLogs"
-    retention_policy {
-      enabled = var.retention_policy_enabled
-      days    = var.days
-    }
-    category = var.category
+    category       = var.category
   }
 
   lifecycle {

@@ -8,7 +8,7 @@ locals {
   label_order = ["name", "environment"]
 }
 
-##----------------------------------------------------------------------------- 
+##-----------------------------------------------------------------------------
 ## Resource Group module call
 ## Resource group in which all resources will be deployed.
 ##-----------------------------------------------------------------------------
@@ -18,10 +18,10 @@ module "resource_group" {
   name        = local.name
   environment = local.environment
   label_order = local.label_order
-  location    = "Canada Central"
+  location    = "North Europe"
 }
 
-##----------------------------------------------------------------------------- 
+##-----------------------------------------------------------------------------
 ## Virtual Network module call.
 ##-----------------------------------------------------------------------------
 module "vnet" {
@@ -36,9 +36,9 @@ module "vnet" {
   enable_network_watcher = true
 }
 
-##----------------------------------------------------------------------------- 
-## Subnet Module call. 
-## Subnet to which network security group will be attached. 
+##-----------------------------------------------------------------------------
+## Subnet Module call.
+## Subnet to which network security group will be attached.
 ##-----------------------------------------------------------------------------
 module "subnet" {
   source               = "clouddrove/subnet/azure"
@@ -64,8 +64,8 @@ module "subnet" {
   ]
 }
 
-##----------------------------------------------------------------------------- 
-## Storage Module call. 
+##-----------------------------------------------------------------------------
+## Storage Module call.
 ## Storage account in which network security group flow log will be received.
 ##-----------------------------------------------------------------------------
 module "storage" {
@@ -76,7 +76,7 @@ module "storage" {
   default_enabled      = true
   resource_group_name  = module.resource_group.resource_group_name
   location             = module.resource_group.resource_group_location
-  storage_account_name = "stordtyre236"
+  storage_account_name = "fdfgfd4567"
   ##   Storage Container
   containers_list = [
     { name = "app-test", access_type = "private" },
@@ -97,8 +97,8 @@ module "storage" {
   enable_diagnostic  = false
 }
 
-##----------------------------------------------------------------------------- 
-## Network Security Group module call. 
+##-----------------------------------------------------------------------------
+## Network Security Group module call.
 ##-----------------------------------------------------------------------------
 module "network_security_group" {
   depends_on                        = [module.subnet]
@@ -115,12 +115,11 @@ module "network_security_group" {
   flow_log_retention_policy_enabled = true
   inbound_rules = [
     {
-      name                  = "ssh"
-      priority              = 101
-      access                = "Allow"
-      protocol              = "Tcp"
-      source_address_prefix = "10.20.0.0/32"
-      #source_address_prefixes    = ["10.20.0.0/32","10.21.0.0/32"]
+      name                       = "ssh"
+      priority                   = 101
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_address_prefix      = "10.20.0.0/32"
       source_port_range          = "*"
       destination_address_prefix = "0.0.0.0/0"
       destination_port_range     = "22"
