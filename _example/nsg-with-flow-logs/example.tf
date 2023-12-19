@@ -76,7 +76,7 @@ module "storage" {
   default_enabled      = true
   resource_group_name  = module.resource_group.resource_group_name
   location             = module.resource_group.resource_group_location
-  storage_account_name = "fdfgfd4567"
+  storage_account_name = "jdjkdkh787"
   ##   Storage Container
   containers_list = [
     { name = "app-test", access_type = "private" },
@@ -113,6 +113,7 @@ module "network_security_group" {
   flow_log_storage_account_id       = module.storage.default_storage_account_id
   enable_traffic_analytics          = false
   flow_log_retention_policy_enabled = true
+  enable_diagnostic                 = true
   inbound_rules = [
     {
       name                       = "ssh"
@@ -135,6 +136,13 @@ module "network_security_group" {
       destination_address_prefix = "0.0.0.0/0"
       destination_port_range     = "22"
       description                = "ssh allowed port"
+    }
+  ]
+  logs = [{
+    category = "NetworkSecurityGroupEvent"
+    },
+    {
+      category = "NetworkSecurityGroupRuleCounter"
     }
   ]
 }

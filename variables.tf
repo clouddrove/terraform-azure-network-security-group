@@ -96,12 +96,6 @@ variable "enable_diagnostic" {
   description = "Set to false to prevent the module from creating the diagnosys setting for the NSG Resource.."
 }
 
-variable "storage_account_id" {
-  type        = string
-  default     = null
-  description = "Storage account id to pass it to destination details of diagnosys setting of NSG."
-}
-
 variable "eventhub_name" {
   type        = string
   default     = null
@@ -124,12 +118,6 @@ variable "log_analytics_destination_type" {
   type        = string
   default     = "AzureDiagnostics"
   description = "Possible values are AzureDiagnostics and Dedicated, default to AzureDiagnostics. When set to Dedicated, logs sent to a Log Analytics workspace will go into resource specific tables, instead of the legacy AzureDiagnostics table."
-}
-
-variable "category" {
-  type        = string
-  default     = null
-  description = " The name of a Diagnostic Log Category Group for this Resource."
 }
 
 variable "enable_flow_logs" {
@@ -179,3 +167,11 @@ variable "flow_log_version" {
   default     = 1
   description = " The version (revision) of the flow log. Possible values are 1 and 2."
 }
+
+variable "logs" {
+  type        = list(map(string))
+  default     = []
+  description = "List of log categories. Defaults to all available."
+}
+
+
