@@ -76,7 +76,7 @@ module "storage" {
   default_enabled      = true
   resource_group_name  = module.resource_group.resource_group_name
   location             = module.resource_group.resource_group_location
-  storage_account_name = "djshfjdh465"
+  storage_account_name = "mystorage"
   ##   Storage Container
   containers_list = [
     { name = "app-test", access_type = "private" },
