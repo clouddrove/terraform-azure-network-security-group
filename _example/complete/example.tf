@@ -25,9 +25,9 @@ module "resource_group" {
 ## Virtual Network module call.
 ##-----------------------------------------------------------------------------
 module "vnet" {
-  depends_on = [module.resource_group]
-  source     = "clouddrove/vnet/azure"
-  version    = "1.0.4"
+  depends_on          = [module.resource_group]
+  source              = "clouddrove/vnet/azure"
+  version             = "1.0.4"
   name                = local.name
   environment         = local.environment
   resource_group_name = module.resource_group.resource_group_name
@@ -40,7 +40,7 @@ module "vnet" {
 ## Subnet to which network security group will be attached.
 ##-----------------------------------------------------------------------------
 module "subnet" {
-  source = "clouddrove/subnet/azure"
+  source               = "clouddrove/subnet/azure"
   version              = "1.0.2"
   name                 = local.name
   environment          = local.environment
