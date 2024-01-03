@@ -27,12 +27,12 @@ module "resource_group" {
 module "vnet" {
   depends_on             = [module.resource_group]
   source                 = "clouddrove/vnet/azure"
-  version                = "1.0.3"
+  version                = "1.0.4"
   name                   = local.name
   environment            = local.environment
   resource_group_name    = module.resource_group.resource_group_name
   location               = module.resource_group.resource_group_location
-  address_space          = "10.30.0.0/22"
+  address_spaces         = ["10.30.0.0/22"]
   enable_network_watcher = true
 }
 
@@ -47,7 +47,7 @@ module "subnet" {
   environment          = local.environment
   resource_group_name  = module.resource_group.resource_group_name
   location             = module.resource_group.resource_group_location
-  virtual_network_name = join("", module.vnet.vnet_name)
+  virtual_network_name = module.vnet.vnet_name
   # Subnet Configuration
   subnet_names    = ["subnet"]
   subnet_prefixes = ["10.30.0.0/24"]
@@ -76,7 +76,7 @@ module "storage" {
   default_enabled      = true
   resource_group_name  = module.resource_group.resource_group_name
   location             = module.resource_group.resource_group_location
-  storage_account_name = "jdjkdkh787"
+  storage_account_name = "djshfjdh465"
   ##   Storage Container
   containers_list = [
     { name = "app-test", access_type = "private" },
@@ -92,7 +92,7 @@ module "storage" {
   queues                   = ["queue1"]
   management_policy_enable = true
   #enable private endpoint
-  virtual_network_id = module.vnet.vnet_id[0]
+  virtual_network_id = module.vnet.vnet_id
   subnet_id          = module.subnet.default_subnet_id[0]
   enable_diagnostic  = false
 }

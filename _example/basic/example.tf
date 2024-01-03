@@ -13,9 +13,9 @@ module "network_security_group" {
   source                  = "../../"
   name                    = local.name
   environment             = local.environment
-  resource_group_name     = "app-storage-test-resource-group"
+  resource_group_name     = "app-subnet-test-resource-group"
   resource_group_location = "North Europe"
-  subnet_ids              = ["/subscriptions/068245d4-3c94-42fe-9c4d-9e5e1cabc60c/resourceGroups/"]
+  subnet_ids              = ["xxxxxxxxxxx"]
   inbound_rules = [
     {
       name                       = "ssh"

@@ -20,7 +20,7 @@ output "resource_group_location" {
 
 output "virtual_network_name" {
   description = "The name of the virtual network in which the subnet is created in."
-  value       = join("", module.vnet.vnet_name)
+  value       = module.vnet.vnet_name
 }
 
 output "address_prefixes" {

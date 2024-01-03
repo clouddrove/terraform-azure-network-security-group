@@ -36,7 +36,7 @@ resource "azurerm_network_security_group" "nsg" {
 resource "azurerm_network_security_rule" "inbound" {
   for_each                     = { for rule in var.inbound_rules : rule.name => rule }
   resource_group_name          = var.resource_group_name
-  network_security_group_name  = join("", azurerm_network_security_group.nsg[*].name)
+  network_security_group_name  = azurerm_network_security_group.nsg[0].name
   direction                    = "Inbound"
   name                         = each.value.name
   priority                     = each.value.priority
@@ -66,7 +66,7 @@ resource "azurerm_network_security_rule" "inbound" {
 resource "azurerm_network_security_rule" "outbound" {
   for_each                     = { for rule in var.outbound_rules : rule.name => rule }
   resource_group_name          = var.resource_group_name
-  network_security_group_name  = join("", azurerm_network_security_group.nsg[*].name)
+  network_security_group_name  = azurerm_network_security_group.nsg[0].name
   direction                    = "Outbound"
   name                         = each.value.name
   priority                     = each.value.priority
@@ -96,7 +96,7 @@ resource "azurerm_network_security_rule" "outbound" {
 resource "azurerm_subnet_network_security_group_association" "example" {
   count                     = var.enabled ? length(var.subnet_ids) : 0
   subnet_id                 = element(var.subnet_ids, count.index)
-  network_security_group_id = join("", azurerm_network_security_group.nsg[*].id)
+  network_security_group_id = azurerm_network_security_group.nsg[0].id
 }
 
 ##-----------------------------------------------------------------------------
@@ -110,7 +110,7 @@ resource "azurerm_network_watcher_flow_log" "nsg_flow_logs" {
   version                   = var.flow_log_version
   network_watcher_name      = var.network_watcher_name
   resource_group_name       = var.resource_group_name
-  network_security_group_id = join("", azurerm_network_security_group.nsg[*].id)
+  network_security_group_id = azurerm_network_security_group.nsg[0].id
   storage_account_id        = var.flow_log_storage_account_id
   retention_policy {
     enabled = var.flow_log_retention_policy_enabled

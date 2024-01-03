@@ -14,13 +14,13 @@ output "resource_group_name" {
 }
 
 output "resource_group_location" {
-  description = "The name of the resource group in which the subnet is created in."
   value       = module.resource_group.resource_group_location
+  description = "The name of the resource group in which the subnet is created in."
 }
 
 output "virtual_network_name" {
+  value       = module.vnet.vnet_name
   description = "The name of the virtual network in which the subnet is created in."
-  value       = join("", module.vnet.vnet_name)
 }
 
 output "address_prefixes" {
@@ -34,8 +34,8 @@ output "route_table_id" {
 }
 
 output "route_table_associated_subnets" {
-  description = "The collection of Subnets associated with this route table."
   value       = module.subnet[*].route_table_associated_subnets
+  description = "The collection of Subnets associated with this route table."
 }
 
 output "security_group_id" {

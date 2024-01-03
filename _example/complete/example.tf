@@ -25,14 +25,14 @@ module "resource_group" {
 ## Virtual Network module call.
 ##-----------------------------------------------------------------------------
 module "vnet" {
-  depends_on          = [module.resource_group]
-  source              = "clouddrove/vnet/azure"
-  version             = "1.0.3"
+  depends_on = [module.resource_group]
+  source     = "clouddrove/vnet/azure"
+  version    = "1.0.4"
   name                = local.name
   environment         = local.environment
   resource_group_name = module.resource_group.resource_group_name
   location            = module.resource_group.resource_group_location
-  address_space       = "10.30.0.0/22"
+  address_spaces      = ["10.30.0.0/22"]
 }
 
 ##-----------------------------------------------------------------------------
@@ -40,13 +40,13 @@ module "vnet" {
 ## Subnet to which network security group will be attached.
 ##-----------------------------------------------------------------------------
 module "subnet" {
-  source               = "clouddrove/subnet/azure"
+  source = "clouddrove/subnet/azure"
   version              = "1.0.2"
   name                 = local.name
   environment          = local.environment
   resource_group_name  = module.resource_group.resource_group_name
   location             = module.resource_group.resource_group_location
-  virtual_network_name = join("", module.vnet.vnet_name)
+  virtual_network_name = module.vnet.vnet_name
   # Subnet Configuration
   subnet_names    = ["subnet"]
   subnet_prefixes = ["10.30.0.0/24"]
