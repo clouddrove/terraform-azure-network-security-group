@@ -15,10 +15,13 @@
 
 <p align="center">
 
-<a href="https://www.terraform.io">
-  <img src="https://img.shields.io/badge/Terraform-v1.0.0-green" alt="Terraform">
+<a href="https://github.com/clouddrove/terraform-azure-network-security-group/releases/latest">
+  <img src="https://img.shields.io/github/release/clouddrove/terraform-azure-network-security-group.svg" alt="Latest Release">
 </a>
-<a href="LICENSE">
+<a href="https://github.com/clouddrove/terraform-azure-network-security-group/actions/workflows/tfsec.yml">
+  <img src="https://github.com/clouddrove/terraform-azure-network-security-group/actions/workflows/tfsec.yml/badge.svg" alt="tfsec">
+</a>
+<a href="LICENSE.md">
   <img src="https://img.shields.io/badge/License-APACHE-blue.svg" alt="Licence">
 </a>
 
@@ -64,28 +67,65 @@ This module has a few dependencies:
 **IMPORTANT:** Since the `master` branch used in `source` varies based on new modifications, we suggest that you use the release versions [here](https://github.com/clouddrove/terraform-azure-network-security-group/releases).
 
 
-### Simple Example
+### Basic Example
 Here is an example of how you can use this module in your inventory structure:
-  ```hcl
-   module "network_security_group" {
+ ```hcl
+    module "network_security_group" {
     source                  = "clouddrove/network-security-group/azure"
-    app_name                = "app"
-    environment             = "test"
-    resource_group_location = module.resource_group.resource_group_location
-    subnet_ids              = module.subnet.default_subnet_id
-    resource_group_name     = module.resource_group.resource_group_name
+    name                    = local.name
+    environment             = local.environment
+    resource_group_name     = "app-storage-test-resource-group"
+    resource_group_location = "North Europe"
+    subnet_ids              = ["/subscriptions/068245d4-3c94-42fe-9c4d-9e5e1cabc60c/resourceGroups/"]
     inbound_rules = [
+      {
+        name                       = "ssh"
+        priority                   = 101
+        access                     = "Allow"
+        protocol                   = "Tcp"
+        source_address_prefix      = "10.20.0.0/32"
+        source_port_range          = "*"
+        destination_address_prefix = "0.0.0.0/0"
+        destination_port_range     = "22"
+        description                = "ssh allowed port"
+      },
+      {
+        name                       = "https"
+        priority                   = 102
+        access                     = "Allow"
+        protocol                   = "*"
+        source_address_prefix      = "VirtualNetwork"
+        source_port_range          = "80,443"
+        destination_address_prefix = "0.0.0.0/0"
+        destination_port_range     = "22"
+        description                = "ssh allowed port"
+      }
+    ]
+     enable_diagnostic = false
+    }
+```
+
+### complete Example
+```hcl
+  module "network_security_group" {
+  depends_on              = [module.subnet]
+    source                = "clouddrove/network-security-group/azure"
+  name                    = local.name
+  environment             = local.environment
+  resource_group_name     = module.resource_group.resource_group_name
+  resource_group_location = module.resource_group.resource_group_location
+  subnet_ids              = module.subnet.default_subnet_id
+  inbound_rules = [
     {
-      name                        = "ssh"
-      priority                    = 101
-      access                      = "Allow"
-      protocol                    = "Tcp"
-      source_address_prefix       = "10.20.0.0/32"
-      #source_address_prefixes    = ["10.20.0.0/32","10.21.0.0/32"]
-      source_port_range           = "*"
-      destination_address_prefix  = "0.0.0.0/0"
-      destination_port_range      = "22"
-      description                 = "ssh allowed port"
+      name                  = "ssh"
+      priority              = 101
+      access                = "Allow"
+      protocol              = "Tcp"
+      source_address_prefix = "10.20.0.0/32"
+      source_port_range          = "*"
+      destination_address_prefix = "0.0.0.0/0"
+      destination_port_range     = "22"
+      description                = "ssh allowed port"
     },
     {
       name                       = "https"
@@ -97,10 +137,54 @@ Here is an example of how you can use this module in your inventory structure:
       destination_address_prefix = "0.0.0.0/0"
       destination_port_range     = "22"
       description                = "ssh allowed port"
-      }
-    ]
-  }
-  ```
+    }
+  ]
+  enable_diagnostic          = true
+  log_analytics_workspace_id = module.log-analytics.workspace_id
+ }
+```
+
+### nsg-with-flow-logs Example
+```hcl
+  module "network_security_group" {
+  depends_on                        = [module.subnet]
+        source                      = "clouddrove/network-security-group/azure"
+  name                              = local.name
+  environment                       = local.environment
+  resource_group_name               = module.resource_group.resource_group_name
+  resource_group_location           = module.resource_group.resource_group_location
+  subnet_ids                        = module.subnet.default_subnet_id
+  enable_flow_logs                  = true
+  network_watcher_name              = module.vnet.network_watcher_name
+  flow_log_storage_account_id       = module.storage.default_storage_account_id
+  enable_traffic_analytics          = false
+  flow_log_retention_policy_enabled = true
+  inbound_rules = [
+    {
+      name                       = "ssh"
+      priority                   = 101
+      access                     = "Allow"
+      protocol                   = "Tcp"
+      source_address_prefix      = "10.20.0.0/32"
+      source_port_range          = "*"
+      destination_address_prefix = "0.0.0.0/0"
+      destination_port_range     = "22"
+      description                = "ssh allowed port"
+    },
+    {
+      name                       = "https"
+      priority                   = 102
+      access                     = "Allow"
+      protocol                   = "*"
+      source_address_prefix      = "VirtualNetwork"
+      source_port_range          = "80,443"
+      destination_address_prefix = "0.0.0.0/0"
+      destination_port_range     = "22"
+      description                = "ssh allowed port"
+    }
+  ]
+ }
+```
 
 
 
@@ -111,11 +195,7 @@ Here is an example of how you can use this module in your inventory structure:
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| attributes | Additional attributes (e.g. `1`). | `list(string)` | `[]` | no |
-| business\_unit | Top-level division of your company that owns the subscription or workload that the resource belongs to. In smaller organizations, this tag might represent a single corporate or shared top-level organizational element. | `string` | `"Corp"` | no |
-| category | The name of a Diagnostic Log Category Group for this Resource. | `string` | `null` | no |
 | create | Used when creating the Resource Group. | `string` | `"30m"` | no |
-| days | Number of days to create retension policies for te diagnosys setting. | `number` | `365` | no |
 | delete | Used when deleting the Resource Group. | `string` | `"30m"` | no |
 | enable\_diagnostic | Set to false to prevent the module from creating the diagnosys setting for the NSG Resource.. | `bool` | `false` | no |
 | enable\_flow\_logs | Flag to be set true when network security group flow logging feature is to be enabled. | `bool` | `false` | no |
@@ -124,7 +204,6 @@ Here is an example of how you can use this module in your inventory structure:
 | environment | Environment (e.g. `prod`, `dev`, `staging`). | `string` | `""` | no |
 | eventhub\_authorization\_rule\_id | Eventhub authorization rule id to pass it to destination details of diagnosys setting of NSG. | `string` | `null` | no |
 | eventhub\_name | Eventhub Name to pass it to destination details of diagnosys setting of NSG. | `string` | `null` | no |
-| extra\_tags | Additional tags (e.g. map(`BusinessUnit`,`XYZ`). | `map(string)` | `{}` | no |
 | flow\_log\_retention\_policy\_days | The number of days to retain flow log records. | `number` | `100` | no |
 | flow\_log\_retention\_policy\_enabled | Boolean flag to enable/disable retention. | `bool` | `false` | no |
 | flow\_log\_storage\_account\_id | The id of storage account in which flow logs will be received. Note: Currently, only standard-tier storage accounts are supported. | `string` | `null` | no |
@@ -134,6 +213,7 @@ Here is an example of how you can use this module in your inventory structure:
 | log\_analytics\_destination\_type | Possible values are AzureDiagnostics and Dedicated, default to AzureDiagnostics. When set to Dedicated, logs sent to a Log Analytics workspace will go into resource specific tables, instead of the legacy AzureDiagnostics table. | `string` | `"AzureDiagnostics"` | no |
 | log\_analytics\_workspace\_id | log analytics workspace id to pass it to destination details of diagnosys setting of NSG. | `string` | `null` | no |
 | log\_analytics\_workspace\_resource\_id | The resource ID of the attached log analytics workspace. | `string` | `null` | no |
+| logs | List of log categories. Defaults to all available. | `list(map(string))` | `[]` | no |
 | managedby | ManagedBy, eg 'CloudDrove'. | `string` | `"hello@clouddrove.com"` | no |
 | name | Name  (e.g. `app` or `cluster`). | `string` | `""` | no |
 | network\_watcher\_name | The name of the Network Watcher. Changing this forces a new resource to be created. | `string` | `null` | no |
@@ -142,10 +222,7 @@ Here is an example of how you can use this module in your inventory structure:
 | repository | Terraform current module repo | `string` | `""` | no |
 | resource\_group\_location | The Location of the resource group where to create the network security group. | `string` | n/a | yes |
 | resource\_group\_name | The name of the resource group in which to create the network security group. | `string` | n/a | yes |
-| retention\_policy\_enabled | Set to false to prevent the module from creating retension policy for the diagnosys setting. | `bool` | `false` | no |
-| storage\_account\_id | Storage account id to pass it to destination details of diagnosys setting of NSG. | `string` | `null` | no |
 | subnet\_ids | The ID of the Subnet. Changing this forces a new resource to be created. | `list(string)` | `[]` | no |
-| tags | A mapping of tags to assign to the resource. | `map(string)` | `{}` | no |
 | update | Used when updating the Resource Group. | `string` | `"30m"` | no |
 
 ## Outputs
@@ -154,6 +231,9 @@ Here is an example of how you can use this module in your inventory structure:
 |------|-------------|
 | id | The network security group configuration ID. |
 | name | The name of the network security group. |
+| network\_watcher\_name | The name of the Network Watcher. Changing this forces a new resource to be created. |
+| storage\_account\_id | The ID of the Storage Account where flow logs are stored. |
+| subnet\_id | The ID of the Subnet. Changing this forces a new resource to be created. |
 | tags | The tags assigned to the resource. |
 
 
