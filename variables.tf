@@ -89,7 +89,6 @@ variable "delete" {
 }
 
 # Diagnosis Settings Enable
-
 variable "enable_diagnostic" {
   type        = bool
   default     = false

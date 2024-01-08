@@ -76,7 +76,7 @@ module "storage" {
   default_enabled      = true
   resource_group_name  = module.resource_group.resource_group_name
   location             = module.resource_group.resource_group_location
-  storage_account_name = "mystorage"
+  storage_account_name = "mystorage42343432"
   ##   Storage Container
   containers_list = [
     { name = "app-test", access_type = "private" },
@@ -101,7 +101,7 @@ module "storage" {
 ## Network Security Group module call.
 ##-----------------------------------------------------------------------------
 module "network_security_group" {
-  depends_on                        = [module.subnet]
+  depends_on                        = [module.subnet, module.storage]
   source                            = "../../"
   name                              = local.name
   environment                       = local.environment
@@ -122,7 +122,7 @@ module "network_security_group" {
       protocol                   = "Tcp"
       source_address_prefix      = "10.20.0.0/32"
       source_port_range          = "*"
-      destination_address_prefix = "0.0.0.0/0"
+      destination_address_prefix = "VirtualNetwork"
       destination_port_range     = "22"
       description                = "ssh allowed port"
     },
@@ -130,12 +130,12 @@ module "network_security_group" {
       name                       = "https"
       priority                   = 102
       access                     = "Allow"
-      protocol                   = "*"
-      source_address_prefix      = "VirtualNetwork"
-      source_port_range          = "80,443"
-      destination_address_prefix = "0.0.0.0/0"
-      destination_port_range     = "22"
-      description                = "ssh allowed port"
+      protocol                   = "Tcp"
+      source_address_prefix      = "0.0.0.0/0"
+      source_port_range          = "*"
+      destination_address_prefix = "VirtualNetwork"
+      destination_port_range     = "80,443"
+      description                = "https allowed port"
     }
   ]
   logs = [{

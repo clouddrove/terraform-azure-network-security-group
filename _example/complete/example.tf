@@ -41,7 +41,7 @@ module "vnet" {
 ##-----------------------------------------------------------------------------
 module "subnet" {
   source               = "clouddrove/subnet/azure"
-  version              = "1.0.2"
+  version              = "1.1.0"
   name                 = local.name
   environment          = local.environment
   resource_group_name  = module.resource_group.resource_group_name
@@ -98,9 +98,9 @@ module "network_security_group" {
       priority                   = 101
       access                     = "Allow"
       protocol                   = "Tcp"
-      source_address_prefix      = "10.20.0.0/32"
+      source_address_prefix      = "VirtualNetwork"
       source_port_range          = "*"
-      destination_address_prefix = "0.0.0.0/0"
+      destination_address_prefix = "VirtualNetwork"
       destination_port_range     = "22"
       description                = "ssh allowed port"
     },
@@ -109,9 +109,9 @@ module "network_security_group" {
       priority                   = 102
       access                     = "Allow"
       protocol                   = "*"
-      source_address_prefix      = "VirtualNetwork"
+      source_address_prefix      = "0.0.0.0/0"
       source_port_range          = "80,443"
-      destination_address_prefix = "0.0.0.0/0"
+      destination_address_prefix = "VirtualNetwork"
       destination_port_range     = "22"
       description                = "ssh allowed port"
     }
