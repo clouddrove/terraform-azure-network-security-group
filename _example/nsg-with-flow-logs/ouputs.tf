@@ -20,7 +20,7 @@ output "resource_group_location" {
 
 output "virtual_network_name" {
   description = "The name of the virtual network in which the subnet is created in."
-  value       = join("", module.vnet.vnet_name)
+  value       = module.vnet.vnet_name
 }
 
 output "address_prefixes" {
@@ -35,7 +35,7 @@ output "route_table_id" {
 
 output "route_table_associated_subnets" {
   description = "The collection of Subnets associated with this route table."
-  value       = module.subnet.*.route_table_associated_subnets[0]
+  value       = module.subnet[*].route_table_associated_subnets
 }
 
 output "security_group_id" {
@@ -46,4 +46,14 @@ output "security_group_id" {
 output "security_group_name" {
   value       = module.network_security_group.name
   description = "The name of the resource group in which to create the network security group. Changing this forces a new resource to be created."
+}
+
+output "network_watcher_name" {
+  value       = module.network_security_group.network_watcher_name
+  description = "The name of the Network Watcher. Changing this forces a new resource to be created."
+}
+
+output "storage_account_id" {
+  value       = module.network_security_group.storage_account_id
+  description = "The ID of the Storage Account where flow logs are stored."
 }

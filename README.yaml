@@ -16,12 +16,15 @@ github_repo: clouddrove/terraform-azure-network-security-group
 
 # Badges to display
 badges:
-  - name: "Terraform"
-    image: "https://img.shields.io/badge/Terraform-v1.0.0-green"
-    url: "https://www.terraform.io"
+  - name: "Latest Release"
+    image: "https://img.shields.io/github/release/clouddrove/terraform-azure-network-security-group.svg"
+    url: "https://github.com/clouddrove/terraform-azure-network-security-group/releases/latest"
+  - name: "tfsec"
+    image: "https://github.com/clouddrove/terraform-azure-network-security-group/actions/workflows/tfsec.yml/badge.svg"
+    url: "https://github.com/clouddrove/terraform-azure-network-security-group/actions/workflows/tfsec.yml"
   - name: "Licence"
     image: "https://img.shields.io/badge/License-APACHE-blue.svg"
-    url: "LICENSE"
+    url: "LICENSE.md"
 
 #  description of this project
 description: |-
@@ -34,28 +37,65 @@ include:
 # How to use this project
 # yamllint disable rule:line-length
 usage: |-
-  ### Simple Example
+  ### Basic Example
   Here is an example of how you can use this module in your inventory structure:
-    ```hcl
-     module "network_security_group" {
+   ```hcl
+      module "network_security_group" {
       source                  = "clouddrove/network-security-group/azure"
-      app_name                = "app"
-      environment             = "test"
-      resource_group_location = module.resource_group.resource_group_location
-      subnet_ids              = module.subnet.default_subnet_id
-      resource_group_name     = module.resource_group.resource_group_name
+      name                    = local.name
+      environment             = local.environment
+      resource_group_name     = "app-storage-test-resource-group"
+      resource_group_location = "North Europe"
+      subnet_ids              = ["/subscriptions/068245d4-3c94-42fe-9c4d-9e5e1cabc60c/resourceGroups/"]
       inbound_rules = [
+        {
+          name                       = "ssh"
+          priority                   = 101
+          access                     = "Allow"
+          protocol                   = "Tcp"
+          source_address_prefix      = "10.20.0.0/32"
+          source_port_range          = "*"
+          destination_address_prefix = "0.0.0.0/0"
+          destination_port_range     = "22"
+          description                = "ssh allowed port"
+        },
+        {
+          name                       = "https"
+          priority                   = 102
+          access                     = "Allow"
+          protocol                   = "*"
+          source_address_prefix      = "VirtualNetwork"
+          source_port_range          = "80,443"
+          destination_address_prefix = "0.0.0.0/0"
+          destination_port_range     = "22"
+          description                = "ssh allowed port"
+        }
+      ]
+       enable_diagnostic = false
+      }
+  ```
+
+  ### complete Example
+  ```hcl
+    module "network_security_group" {
+    depends_on              = [module.subnet]
+      source                = "clouddrove/network-security-group/azure"
+    name                    = local.name
+    environment             = local.environment
+    resource_group_name     = module.resource_group.resource_group_name
+    resource_group_location = module.resource_group.resource_group_location
+    subnet_ids              = module.subnet.default_subnet_id
+    inbound_rules = [
       {
-        name                        = "ssh"
-        priority                    = 101
-        access                      = "Allow"
-        protocol                    = "Tcp"
-        source_address_prefix       = "10.20.0.0/32"
-        #source_address_prefixes    = ["10.20.0.0/32","10.21.0.0/32"]
-        source_port_range           = "*"
-        destination_address_prefix  = "0.0.0.0/0"
-        destination_port_range      = "22"
-        description                 = "ssh allowed port"
+        name                  = "ssh"
+        priority              = 101
+        access                = "Allow"
+        protocol              = "Tcp"
+        source_address_prefix = "10.20.0.0/32"
+        source_port_range          = "*"
+        destination_address_prefix = "0.0.0.0/0"
+        destination_port_range     = "22"
+        description                = "ssh allowed port"
       },
       {
         name                       = "https"
@@ -67,7 +107,51 @@ usage: |-
         destination_address_prefix = "0.0.0.0/0"
         destination_port_range     = "22"
         description                = "ssh allowed port"
-        }
-      ]
-    }
-    ```
+      }
+    ]
+    enable_diagnostic          = true
+    log_analytics_workspace_id = module.log-analytics.workspace_id
+   }
+  ```
+
+  ### nsg-with-flow-logs Example
+  ```hcl
+    module "network_security_group" {
+    depends_on                        = [module.subnet]
+          source                      = "clouddrove/network-security-group/azure"
+    name                              = local.name
+    environment                       = local.environment
+    resource_group_name               = module.resource_group.resource_group_name
+    resource_group_location           = module.resource_group.resource_group_location
+    subnet_ids                        = module.subnet.default_subnet_id
+    enable_flow_logs                  = true
+    network_watcher_name              = module.vnet.network_watcher_name
+    flow_log_storage_account_id       = module.storage.default_storage_account_id
+    enable_traffic_analytics          = false
+    flow_log_retention_policy_enabled = true
+    inbound_rules = [
+      {
+        name                       = "ssh"
+        priority                   = 101
+        access                     = "Allow"
+        protocol                   = "Tcp"
+        source_address_prefix      = "10.20.0.0/32"
+        source_port_range          = "*"
+        destination_address_prefix = "0.0.0.0/0"
+        destination_port_range     = "22"
+        description                = "ssh allowed port"
+      },
+      {
+        name                       = "https"
+        priority                   = 102
+        access                     = "Allow"
+        protocol                   = "*"
+        source_address_prefix      = "VirtualNetwork"
+        source_port_range          = "80,443"
+        destination_address_prefix = "0.0.0.0/0"
+        destination_port_range     = "22"
+        description                = "ssh allowed port"
+      }
+    ]
+   }
+  ```
