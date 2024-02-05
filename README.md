@@ -204,6 +204,7 @@ Here is an example of how you can use this module in your inventory structure:
 | environment | Environment (e.g. `prod`, `dev`, `staging`). | `string` | `""` | no |
 | eventhub\_authorization\_rule\_id | Eventhub authorization rule id to pass it to destination details of diagnosys setting of NSG. | `string` | `null` | no |
 | eventhub\_name | Eventhub Name to pass it to destination details of diagnosys setting of NSG. | `string` | `null` | no |
+| extra\_tags | Variable to pass extra tags. | `map(string)` | `null` | no |
 | flow\_log\_retention\_policy\_days | The number of days to retain flow log records. | `number` | `100` | no |
 | flow\_log\_retention\_policy\_enabled | Boolean flag to enable/disable retention. | `bool` | `false` | no |
 | flow\_log\_storage\_account\_id | The id of storage account in which flow logs will be received. Note: Currently, only standard-tier storage accounts are supported. | `string` | `null` | no |
