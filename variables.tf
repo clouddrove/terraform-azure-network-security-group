@@ -18,6 +18,12 @@ variable "managedby" {
   description = "ManagedBy, eg 'CloudDrove'."
 }
 
+variable "extra_tags" {
+type = map(string)
+default = null
+description = "Variable to pass extra tags."
+}
+
 variable "repository" {
   type        = string
   default     = ""
@@ -173,9 +179,5 @@ variable "logs" {
   description = "List of log categories. Defaults to all available."
 }
 
-variable "extra_tags" {
-type = map(string)
-default = null
-description = "Variable to pass extra tags."
-}
+
 
