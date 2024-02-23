@@ -1,10 +1,10 @@
 output "id" {
-  value       = azurerm_network_security_group.nsg[0].id
+  value       = try(azurerm_network_security_group.nsg[0].id, null)
   description = "The network security group configuration ID."
 }
 
 output "name" {
-  value       = azurerm_network_security_group.nsg[0].name
+  value       = try(azurerm_network_security_group.nsg[0].name, null)
   description = "The name of the network security group."
 }
 
@@ -14,7 +14,7 @@ output "tags" {
 }
 
 output "subnet_id" {
-  value       = azurerm_subnet_network_security_group_association.example[0].subnet_id
+  value       = try(azurerm_subnet_network_security_group_association.example[*].subnet_id, null)
   description = "The ID of the Subnet. Changing this forces a new resource to be created."
 }
 
