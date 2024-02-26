@@ -35,7 +35,7 @@ resource "azurerm_network_security_group" "nsg" {
 ## Below resource will create network security group inbound rules in azure and will be attached to above network security group.
 ##-----------------------------------------------------------------------------
 resource "azurerm_network_security_rule" "inbound" {
-  for_each                     = { for rule in var.inbound_rules : rule.name => rule }
+  for_each                     = var.enabled ? { for rule in var.inbound_rules : rule.name => rule } : {}
   resource_group_name          = var.resource_group_name
   network_security_group_name  = azurerm_network_security_group.nsg[0].name
   direction                    = "Inbound"
@@ -65,7 +65,7 @@ resource "azurerm_network_security_rule" "inbound" {
 ## Below resource will create network security group outbound rules in azure and will be attached to above network security group.
 ##-----------------------------------------------------------------------------
 resource "azurerm_network_security_rule" "outbound" {
-  for_each                     = { for rule in var.outbound_rules : rule.name => rule }
+  for_each                     = var.enabled ? { for rule in var.outbound_rules : rule.name => rule } : {}
   resource_group_name          = var.resource_group_name
   network_security_group_name  = azurerm_network_security_group.nsg[0].name
   direction                    = "Outbound"
