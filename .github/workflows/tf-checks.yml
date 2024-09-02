@@ -8,14 +8,14 @@ jobs:
   basic-example:
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.2.7
     with:
-      working_directory: './_example/basic/'
+      working_directory: './examples/basic/'
 
   complete-example:
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.2.7
     with:
-      working_directory: './_example/complete/'
+      working_directory: './examples/complete/'
 
   nsg-with-flow-logs-example:
     uses: clouddrove/github-shared-workflows/.github/workflows/tf-checks.yml@1.2.7
     with:
-      working_directory: './_example/nsg-with-flow-logs/'
+      working_directory: './examples/nsg-with-flow-logs/'
