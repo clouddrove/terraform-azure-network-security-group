@@ -178,6 +178,3 @@ variable "logs" {
   default     = []
   description = "List of log categories. Defaults to all available."
 }
-
-
-
