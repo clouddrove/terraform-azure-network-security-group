@@ -43,4 +43,3 @@
 | storage\_account\_id | The ID of the Storage Account where flow logs are stored. |
 | subnet\_id | The ID of the Subnet. Changing this forces a new resource to be created. |
 | tags | The tags assigned to the resource. |
-
