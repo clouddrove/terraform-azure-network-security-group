@@ -9,8 +9,8 @@ provider "azurerm" {
 }
 
 locals {
-  name        = "app-32"
-  environment = "test-43"
+  name        = "app"
+  environment = "test"
   label_order = ["name", "environment"]
 }
 
@@ -76,7 +76,7 @@ module "subnet" {
 ##-----------------------------------------------------------------------------
 module "storage" {
   source  = "clouddrove/storage/azure"
-  version = "1.1.0"
+  version = "1.1.1"
   providers = {
     azurerm.dns_sub  = azurerm.peer, #change this to other alias if dns hosted in other subscription.
     azurerm.main_sub = azurerm
