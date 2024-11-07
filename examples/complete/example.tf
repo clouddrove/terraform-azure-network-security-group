@@ -70,7 +70,7 @@ module "subnet" {
 ##-----------------------------------------------------------------------------
 module "log-analytics" {
   source                           = "clouddrove/log-analytics/azure"
-  version                          = "1.1.0"
+  version                          = "2.0.0"
   name                             = local.name
   environment                      = local.environment
   label_order                      = local.label_order
