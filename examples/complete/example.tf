@@ -1,4 +1,5 @@
 provider "azurerm" {
+  subscription_id = "000000-11111-1223-XXX-XXXXXXXXXXXX"
   features {}
 }
 
@@ -41,7 +42,7 @@ module "vnet" {
 ##-----------------------------------------------------------------------------
 module "subnet" {
   source               = "clouddrove/subnet/azure"
-  version              = "1.1.0"
+  version              = "1.2.1"
   name                 = local.name
   environment          = local.environment
   resource_group_name  = module.resource_group.resource_group_name
@@ -69,7 +70,7 @@ module "subnet" {
 ##-----------------------------------------------------------------------------
 module "log-analytics" {
   source                           = "clouddrove/log-analytics/azure"
-  version                          = "1.0.1"
+  version                          = "1.1.0"
   name                             = local.name
   environment                      = local.environment
   label_order                      = local.label_order

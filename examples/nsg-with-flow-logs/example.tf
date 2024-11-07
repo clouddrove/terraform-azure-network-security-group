@@ -1,5 +1,11 @@
 provider "azurerm" {
   features {}
+  subscription_id = "000000-11111-1223-XXX-XXXXXXXXXXXX"
+}
+provider "azurerm" {
+  features {}
+  alias           = "peer"
+  subscription_id = "000000-11111-1223-XXX-XXXXXXXXXXXX"
 }
 
 locals {
@@ -18,7 +24,7 @@ module "resource_group" {
   name        = local.name
   environment = local.environment
   label_order = local.label_order
-  location    = "North Europe"
+  location    = "West Europe"
 }
 
 ##-----------------------------------------------------------------------------
@@ -42,7 +48,7 @@ module "vnet" {
 ##-----------------------------------------------------------------------------
 module "subnet" {
   source               = "clouddrove/subnet/azure"
-  version              = "1.0.2"
+  version              = "1.2.1"
   name                 = local.name
   environment          = local.environment
   resource_group_name  = module.resource_group.resource_group_name
@@ -69,14 +75,17 @@ module "subnet" {
 ## Storage account in which network security group flow log will be received.
 ##-----------------------------------------------------------------------------
 module "storage" {
-  source               = "clouddrove/storage/azure"
-  version              = "1.0.9"
+  source  = "clouddrove/storage/azure"
+  version = "1.1.1"
+  providers = {
+    azurerm.dns_sub  = azurerm.peer, #change this to other alias if dns hosted in other subscription.
+    azurerm.main_sub = azurerm
+  }
   name                 = local.name
   environment          = local.environment
-  default_enabled      = true
   resource_group_name  = module.resource_group.resource_group_name
   location             = module.resource_group.resource_group_location
-  storage_account_name = "mystorage42343432"
+  storage_account_name = "mystorage42412487"
   ##   Storage Container
   containers_list = [
     { name = "app-test", access_type = "private" },
@@ -110,7 +119,7 @@ module "network_security_group" {
   subnet_ids                        = module.subnet.default_subnet_id
   enable_flow_logs                  = true
   network_watcher_name              = module.vnet.network_watcher_name
-  flow_log_storage_account_id       = module.storage.default_storage_account_id
+  flow_log_storage_account_id       = module.storage.storage_account_id
   enable_traffic_analytics          = false
   flow_log_retention_policy_enabled = true
   enable_diagnostic                 = true
