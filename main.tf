@@ -103,7 +103,7 @@ resource "azurerm_subnet_network_security_group_association" "example" {
 ##-----------------------------------------------------------------------------
 ## Below resource will associate above created network security group to network interface(nic).
 ##-----------------------------------------------------------------------------
-resource "azurerm_network_interface_security_group_association" "example" {
+resource "azurerm_network_interface_security_group_association" "example1" {
   count                     = var.enabled && nic_association ? length(var.nic_ids) : 0
   network_interface_id      = element(var.nic_ids, count.index)
   network_security_group_id = azurerm_network_security_group.nsg[0].id
