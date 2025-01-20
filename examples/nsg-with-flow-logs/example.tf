@@ -1,11 +1,15 @@
 provider "azurerm" {
   features {}
-  subscription_id = "000000-11111-1223-XXX-XXXXXXXXXXXX"
+  # subscription_id = "000000-11111-1223-XXX-XXXXXXXXXXXX"
+  subscription_id = "1ac2caa4-336e-4daa-b8f1-0fbabe2d4b11"
+
 }
 provider "azurerm" {
   features {}
-  alias           = "peer"
-  subscription_id = "000000-11111-1223-XXX-XXXXXXXXXXXX"
+  alias = "peer"
+  # subscription_id = "000000-11111-1223-XXX-XXXXXXXXXXXX"
+  subscription_id = "1ac2caa4-336e-4daa-b8f1-0fbabe2d4b11"
+
 }
 
 locals {
@@ -123,6 +127,7 @@ module "network_security_group" {
   enable_traffic_analytics          = false
   flow_log_retention_policy_enabled = true
   enable_diagnostic                 = true
+  subnet_association                = true
   inbound_rules = [
     {
       name                       = "ssh"

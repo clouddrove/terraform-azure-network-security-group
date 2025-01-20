@@ -93,6 +93,7 @@ module "network_security_group" {
   resource_group_name     = module.resource_group.resource_group_name
   resource_group_location = module.resource_group.resource_group_location
   subnet_ids              = module.subnet.default_subnet_id
+  subnet_association      = true
   inbound_rules = [
     {
       name                       = "ssh"
