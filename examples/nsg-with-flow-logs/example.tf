@@ -5,7 +5,7 @@ provider "azurerm" {
 }
 provider "azurerm" {
   features {}
-  alias = "peer"
+  alias           = "peer"
   subscription_id = "000000-11111-1223-XXX-XXXXXXXXXXXX"
 }
 
