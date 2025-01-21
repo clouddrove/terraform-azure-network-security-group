@@ -141,7 +141,7 @@ resource "azurerm_network_watcher_flow_log" "nsg_flow_logs" {
 ##-----------------------------------------------------------------------------
 ## Below resource will create diagnostic setting for network security group.
 ##-----------------------------------------------------------------------------
-resource "azurerm_monitor_diagnostic_setting" "example" {
+resource "azurerm_monitor_diagnostic_setting" "diag_settings" {
   count                          = var.enabled && var.enable_diagnostic ? 1 : 0
   name                           = format("%s-nsg-diagnostic-log", module.labels.id)
   target_resource_id             = azurerm_network_security_group.nsg[0].id
