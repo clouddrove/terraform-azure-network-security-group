@@ -94,7 +94,7 @@ resource "azurerm_network_security_rule" "outbound" {
 ##-----------------------------------------------------------------------------
 ## Below resource will associate above created network security group to subnet.
 ##-----------------------------------------------------------------------------
-resource "azurerm_subnet_network_security_group_association" "example" {
+resource "azurerm_subnet_network_security_group_association" "nsg_subnet_association" {
   count                     = var.enabled && var.subnet_association ? length(var.subnet_ids) : 0
   subnet_id                 = element(var.subnet_ids, count.index)
   network_security_group_id = azurerm_network_security_group.nsg[0].id
@@ -103,7 +103,7 @@ resource "azurerm_subnet_network_security_group_association" "example" {
 ##-----------------------------------------------------------------------------
 ## Below resource will associate above created network security group to network interface(nic).
 ##-----------------------------------------------------------------------------
-resource "azurerm_network_interface_security_group_association" "example1" {
+resource "azurerm_network_interface_security_group_association" "nsg_nic_association" {
   count                     = var.enabled && var.nic_association ? length(var.nic_ids) : 0
   network_interface_id      = element(var.nic_ids, count.index)
   network_security_group_id = azurerm_network_security_group.nsg[0].id
