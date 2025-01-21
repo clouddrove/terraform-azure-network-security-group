@@ -14,7 +14,7 @@ output "tags" {
 }
 
 output "subnet_id" {
-  value       = try(azurerm_subnet_network_security_group_association.example[*].subnet_id, null)
+  value       = try(azurerm_subnet_network_security_group_association.nsg_subnet_association[*].subnet_id, null)
   description = "The ID of the Subnet. Changing this forces a new resource to be created."
 }
 
