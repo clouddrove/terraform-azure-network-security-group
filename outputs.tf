@@ -13,10 +13,6 @@ output "tags" {
   description = "The tags assigned to the resource."
 }
 
-output "subnet_id" {
-  value       = try(azurerm_subnet_network_security_group_association.nsg_subnet_association[*].subnet_id, null)
-  description = "The ID of the Subnet. Changing this forces a new resource to be created."
-}
 
 output "network_watcher_name" {
   value       = var.enabled && var.enable_flow_logs ? azurerm_network_watcher_flow_log.nsg_flow_logs[0].name : null
