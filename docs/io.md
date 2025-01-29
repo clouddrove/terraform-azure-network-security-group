@@ -25,11 +25,14 @@
 | managedby | ManagedBy, eg 'CloudDrove'. | `string` | `"hello@clouddrove.com"` | no |
 | name | Name  (e.g. `app` or `cluster`). | `string` | `""` | no |
 | network\_watcher\_name | The name of the Network Watcher. Changing this forces a new resource to be created. | `string` | `null` | no |
+| nic\_association | To create network\_interface association or not | `bool` | `false` | no |
+| nic\_ids | The ID of the nic. Changing this forces a new resource to be created. | `list(string)` | `[]` | no |
 | outbound\_rules | List of objects that represent the configuration of each outbound rule. | `any` | `[]` | no |
 | read | Used when retrieving the Resource Group. | `string` | `"5m"` | no |
 | repository | Terraform current module repo | `string` | `""` | no |
 | resource\_group\_location | The Location of the resource group where to create the network security group. | `string` | n/a | yes |
 | resource\_group\_name | The name of the resource group in which to create the network security group. | `string` | n/a | yes |
+| subnet\_association | To create subnet association or not | `bool` | `false` | no |
 | subnet\_ids | The ID of the Subnet. Changing this forces a new resource to be created. | `list(string)` | `[]` | no |
 | update | Used when updating the Resource Group. | `string` | `"30m"` | no |
 
@@ -41,6 +44,5 @@
 | name | The name of the network security group. |
 | network\_watcher\_name | The name of the Network Watcher. Changing this forces a new resource to be created. |
 | storage\_account\_id | The ID of the Storage Account where flow logs are stored. |
-| subnet\_id | The ID of the Subnet. Changing this forces a new resource to be created. |
 | tags | The tags assigned to the resource. |
 
