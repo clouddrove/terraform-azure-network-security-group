@@ -94,9 +94,18 @@ resource "azurerm_network_security_rule" "outbound" {
 ##-----------------------------------------------------------------------------
 ## Below resource will associate above created network security group to subnet.
 ##-----------------------------------------------------------------------------
-resource "azurerm_subnet_network_security_group_association" "example" {
-  count                     = var.enabled ? length(var.subnet_ids) : 0
+resource "azurerm_subnet_network_security_group_association" "nsg_subnet_association" {
+  count                     = var.enabled && var.subnet_association ? length(var.subnet_ids) : 0
   subnet_id                 = element(var.subnet_ids, count.index)
+  network_security_group_id = azurerm_network_security_group.nsg[0].id
+}
+
+##-----------------------------------------------------------------------------
+## Below resource will associate above created network security group to network interface(nic).
+##-----------------------------------------------------------------------------
+resource "azurerm_network_interface_security_group_association" "nsg_nic_association" {
+  count                     = var.enabled && var.nic_association ? length(var.nic_ids) : 0
+  network_interface_id      = element(var.nic_ids, count.index)
   network_security_group_id = azurerm_network_security_group.nsg[0].id
 }
 
@@ -132,7 +141,7 @@ resource "azurerm_network_watcher_flow_log" "nsg_flow_logs" {
 ##-----------------------------------------------------------------------------
 ## Below resource will create diagnostic setting for network security group.
 ##-----------------------------------------------------------------------------
-resource "azurerm_monitor_diagnostic_setting" "example" {
+resource "azurerm_monitor_diagnostic_setting" "diag_settings" {
   count                          = var.enabled && var.enable_diagnostic ? 1 : 0
   name                           = format("%s-nsg-diagnostic-log", module.labels.id)
   target_resource_id             = azurerm_network_security_group.nsg[0].id

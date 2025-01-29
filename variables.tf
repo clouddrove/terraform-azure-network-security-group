@@ -179,5 +179,20 @@ variable "logs" {
   description = "List of log categories. Defaults to all available."
 }
 
+variable "subnet_association" {
+  type        = bool
+  default     = false
+  description = "To create subnet association or not"
+}
 
+variable "nic_association" {
+  type        = bool
+  default     = false
+  description = "To create network_interface association or not"
+}
 
+variable "nic_ids" {
+  type        = list(string)
+  default     = []
+  description = "The ID of the nic. Changing this forces a new resource to be created."
+}

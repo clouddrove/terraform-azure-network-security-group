@@ -1,6 +1,7 @@
 provider "azurerm" {
   features {}
   subscription_id = "000000-11111-1223-XXX-XXXXXXXXXXXX"
+
 }
 provider "azurerm" {
   features {}
@@ -123,6 +124,7 @@ module "network_security_group" {
   enable_traffic_analytics          = false
   flow_log_retention_policy_enabled = true
   enable_diagnostic                 = true
+  subnet_association                = true
   inbound_rules = [
     {
       name                       = "ssh"
