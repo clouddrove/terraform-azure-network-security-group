@@ -18,7 +18,7 @@ module "labels" {
 ##-----------------------------------------------------------------------------
 resource "azurerm_network_security_group" "nsg" {
   count               = var.enabled ? 1 : 0
-  name                = format("%s-nsg", module.labels.id)
+  name                = var.custom_name == "" ? format("%s-nsg", module.labels.id) : var.custom_name
   resource_group_name = var.resource_group_name
   location            = var.resource_group_location
   tags                = module.labels.tags
