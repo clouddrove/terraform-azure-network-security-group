@@ -77,7 +77,7 @@ module "subnet" {
 ##-----------------------------------------------------------------------------
 module "storage" {
   source  = "clouddrove/storage/azure"
-  version = "1.1.1"
+  version = "1.2.1"
   providers = {
     azurerm.dns_sub  = azurerm.peer, #change this to other alias if dns hosted in other subscription.
     azurerm.main_sub = azurerm
